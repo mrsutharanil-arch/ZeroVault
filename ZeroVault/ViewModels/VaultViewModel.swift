@@ -53,6 +53,10 @@ public final class VaultViewModel: ObservableObject {
     @Published public var isLoading: Bool = false
     @Published public var errorMessage: String? = nil
     
+    public var formattedStorageString: String {
+        ByteCountFormatter.string(fromByteCount: totalStorageBytes, countStyle: .file)
+    }
+    
     private let crypto = CryptographyService.shared
     private let storage = StorageSecurityService.shared
     private let keychain = KeychainService.shared
