@@ -1,0 +1,451 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B01000012900000100000001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000012900000100000001 /* AppState.swift */; };
+		B01000022900000100000001 /* ZeroVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000022900000100000001 /* ZeroVaultApp.swift */; };
+		B01000032900000100000001 /* EncryptedEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000032900000100000001 /* EncryptedEnvelope.swift */; };
+		B01000042900000100000001 /* VaultCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000042900000100000001 /* VaultCategory.swift */; };
+		B01000052900000100000001 /* VaultFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000052900000100000001 /* VaultFile.swift */; };
+		B01000062900000100000001 /* VaultSecuritySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000062900000100000001 /* VaultSecuritySettings.swift */; };
+		B01000072900000100000001 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000072900000100000001 /* AuthenticationService.swift */; };
+		B01000082900000100000001 /* CryptographyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000082900000100000001 /* CryptographyService.swift */; };
+		B01000092900000100000001 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000092900000100000001 /* KeychainService.swift */; };
+		B010000A2900000100000001 /* SecureCameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000A2900000100000001 /* SecureCameraService.swift */; };
+		B010000B2900000100000001 /* StorageSecurityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000B2900000100000001 /* StorageSecurityService.swift */; };
+		B010000C2900000100000001 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000C2900000100000001 /* AuthViewModel.swift */; };
+		B010000D2900000100000001 /* SecureViewerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000D2900000100000001 /* SecureViewerViewModel.swift */; };
+		B010000E2900000100000001 /* VaultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000E2900000100000001 /* VaultViewModel.swift */; };
+		B010000F2900000100000001 /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010000F2900000100000001 /* LockScreenView.swift */; };
+		B01000102900000100000001 /* SecureCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000102900000100000001 /* SecureCameraView.swift */; };
+		B01000112900000100000001 /* SecureOverlayShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000112900000100000001 /* SecureOverlayShield.swift */; };
+		B01000122900000100000001 /* SecurityBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000122900000100000001 /* SecurityBadge.swift */; };
+		B01000132900000100000001 /* SecuritySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000132900000100000001 /* SecuritySettingsView.swift */; };
+		B01000142900000100000001 /* AddFileMenuSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000142900000100000001 /* AddFileMenuSheet.swift */; };
+		B01000152900000100000001 /* StorageSecurityAuditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000152900000100000001 /* StorageSecurityAuditSheet.swift */; };
+		B01000162900000100000001 /* VaultFileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000162900000100000001 /* VaultFileRow.swift */; };
+		B01000172900000100000001 /* VaultHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000172900000100000001 /* VaultHomeView.swift */; };
+		B01000182900000100000001 /* SecureFileViewerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000182900000100000001 /* SecureFileViewerContainer.swift */; };
+		B01000192900000100000001 /* SecureImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000192900000100000001 /* SecureImageViewer.swift */; };
+		B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001A2900000100000001 /* SecurePDFViewer.swift */; };
+		B010001B2900000100000001 /* SecureTextViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001B2900000100000001 /* SecureTextViewer.swift */; };
+		B010001C2900000100000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F010001C2900000100000001 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A01000012900000100000001 /* ZeroVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZeroVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F01000012900000100000001 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		F01000022900000100000001 /* ZeroVaultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroVaultApp.swift; sourceTree = "<group>"; };
+		F01000002900000100000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F01000032900000100000001 /* EncryptedEnvelope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedEnvelope.swift; sourceTree = "<group>"; };
+		F01000042900000100000001 /* VaultCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultCategory.swift; sourceTree = "<group>"; };
+		F01000052900000100000001 /* VaultFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultFile.swift; sourceTree = "<group>"; };
+		F01000062900000100000001 /* VaultSecuritySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultSecuritySettings.swift; sourceTree = "<group>"; };
+		F01000072900000100000001 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		F01000082900000100000001 /* CryptographyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptographyService.swift; sourceTree = "<group>"; };
+		F01000092900000100000001 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		F010000A2900000100000001 /* SecureCameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureCameraService.swift; sourceTree = "<group>"; };
+		F010000B2900000100000001 /* StorageSecurityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageSecurityService.swift; sourceTree = "<group>"; };
+		F010000C2900000100000001 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		F010000D2900000100000001 /* SecureViewerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureViewerViewModel.swift; sourceTree = "<group>"; };
+		F010000E2900000100000001 /* VaultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultViewModel.swift; sourceTree = "<group>"; };
+		F010000F2900000100000001 /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
+		F01000102900000100000001 /* SecureCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureCameraView.swift; sourceTree = "<group>"; };
+		F01000112900000100000001 /* SecureOverlayShield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureOverlayShield.swift; sourceTree = "<group>"; };
+		F01000122900000100000001 /* SecurityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityBadge.swift; sourceTree = "<group>"; };
+		F01000132900000100000001 /* SecuritySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecuritySettingsView.swift; sourceTree = "<group>"; };
+		F01000142900000100000001 /* AddFileMenuSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFileMenuSheet.swift; sourceTree = "<group>"; };
+		F01000152900000100000001 /* StorageSecurityAuditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageSecurityAuditSheet.swift; sourceTree = "<group>"; };
+		F01000162900000100000001 /* VaultFileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultFileRow.swift; sourceTree = "<group>"; };
+		F01000172900000100000001 /* VaultHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultHomeView.swift; sourceTree = "<group>"; };
+		F01000182900000100000001 /* SecureFileViewerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureFileViewerContainer.swift; sourceTree = "<group>"; };
+		F01000192900000100000001 /* SecureImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureImageViewer.swift; sourceTree = "<group>"; };
+		F010001A2900000100000001 /* SecurePDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurePDFViewer.swift; sourceTree = "<group>"; };
+		F010001B2900000100000001 /* SecureTextViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureTextViewer.swift; sourceTree = "<group>"; };
+		F010001C2900000100000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		P01000012900000100000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		G01000012900000100000001 = {
+			isa = PBXGroup;
+			children = (
+				G01000022900000100000001 /* ZeroVault */,
+				G01000032900000100000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		G01000022900000100000001 /* ZeroVault */ = {
+			isa = PBXGroup;
+			children = (
+				G01000042900000100000001 /* App */,
+				G01000052900000100000001 /* Models */,
+				G01000062900000100000001 /* Services */,
+				G01000072900000100000001 /* ViewModels */,
+				G01000082900000100000001 /* Views */,
+				G010000E2900000100000001 /* Resources */,
+			);
+			path = ZeroVault;
+			sourceTree = "<group>";
+		};
+		G01000032900000100000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A01000012900000100000001 /* ZeroVault.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		G01000042900000100000001 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F01000012900000100000001 /* AppState.swift */,
+				F01000022900000100000001 /* ZeroVaultApp.swift */,
+				F01000002900000100000001 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		G01000052900000100000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F01000032900000100000001 /* EncryptedEnvelope.swift */,
+				F01000042900000100000001 /* VaultCategory.swift */,
+				F01000052900000100000001 /* VaultFile.swift */,
+				F01000062900000100000001 /* VaultSecuritySettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		G01000062900000100000001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F01000072900000100000001 /* AuthenticationService.swift */,
+				F01000082900000100000001 /* CryptographyService.swift */,
+				F01000092900000100000001 /* KeychainService.swift */,
+				F010000A2900000100000001 /* SecureCameraService.swift */,
+				F010000B2900000100000001 /* StorageSecurityService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		G01000072900000100000001 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				F010000C2900000100000001 /* AuthViewModel.swift */,
+				F010000D2900000100000001 /* SecureViewerViewModel.swift */,
+				F010000E2900000100000001 /* VaultViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		G01000082900000100000001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				G01000092900000100000001 /* Auth */,
+				G010000A2900000100000001 /* Vault */,
+				G010000B2900000100000001 /* Camera */,
+				G010000C2900000100000001 /* Viewer */,
+				G010000D2900000100000001 /* Components */,
+				G010000F2900000100000001 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		G01000092900000100000001 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				F010000F2900000100000001 /* LockScreenView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		G010000A2900000100000001 /* Vault */ = {
+			isa = PBXGroup;
+			children = (
+				F01000142900000100000001 /* AddFileMenuSheet.swift */,
+				F01000152900000100000001 /* StorageSecurityAuditSheet.swift */,
+				F01000162900000100000001 /* VaultFileRow.swift */,
+				F01000172900000100000001 /* VaultHomeView.swift */,
+			);
+			path = Vault;
+			sourceTree = "<group>";
+		};
+		G010000B2900000100000001 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				F01000102900000100000001 /* SecureCameraView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		G010000C2900000100000001 /* Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				F01000182900000100000001 /* SecureFileViewerContainer.swift */,
+				F01000192900000100000001 /* SecureImageViewer.swift */,
+				F010001A2900000100000001 /* SecurePDFViewer.swift */,
+				F010001B2900000100000001 /* SecureTextViewer.swift */,
+			);
+			path = Viewer;
+			sourceTree = "<group>";
+		};
+		G010000D2900000100000001 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F01000112900000100000001 /* SecureOverlayShield.swift */,
+				F01000122900000100000001 /* SecurityBadge.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		G010000F2900000100000001 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F01000132900000100000001 /* SecuritySettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		G010000E2900000100000001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F010001C2900000100000001 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		T01000012900000100000001 /* ZeroVault */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01000012900000100000001 /* Build configuration list for PBXNativeTarget "ZeroVault" */;
+			buildPhases = (
+				P01000022900000100000001 /* Sources */,
+				P01000012900000100000001 /* Frameworks */,
+				P01000032900000100000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZeroVault;
+			productName = ZeroVault;
+			productReference = A01000012900000100000001 /* ZeroVault.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		001000012900000100000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					T01000012900000100000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = C01000022900000100000001 /* Build configuration list for PBXProject "ZeroVault" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = G01000012900000100000001;
+			productRefGroup = G01000032900000100000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				T01000012900000100000001 /* ZeroVault */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		P01000032900000100000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B010001C2900000100000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		P01000022900000100000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B01000012900000100000001 /* AppState.swift in Sources */,
+				B01000022900000100000001 /* ZeroVaultApp.swift in Sources */,
+				B01000032900000100000001 /* EncryptedEnvelope.swift in Sources */,
+				B01000042900000100000001 /* VaultCategory.swift in Sources */,
+				B01000052900000100000001 /* VaultFile.swift in Sources */,
+				B01000062900000100000001 /* VaultSecuritySettings.swift in Sources */,
+				B01000072900000100000001 /* AuthenticationService.swift in Sources */,
+				B01000082900000100000001 /* CryptographyService.swift in Sources */,
+				B01000092900000100000001 /* KeychainService.swift in Sources */,
+				B010000A2900000100000001 /* SecureCameraService.swift in Sources */,
+				B010000B2900000100000001 /* StorageSecurityService.swift in Sources */,
+				B010000C2900000100000001 /* AuthViewModel.swift in Sources */,
+				B010000D2900000100000001 /* SecureViewerViewModel.swift in Sources */,
+				B010000E2900000100000001 /* VaultViewModel.swift in Sources */,
+				B010000F2900000100000001 /* LockScreenView.swift in Sources */,
+				B01000102900000100000001 /* SecureCameraView.swift in Sources */,
+				B01000112900000100000001 /* SecureOverlayShield.swift in Sources */,
+				B01000122900000100000001 /* SecurityBadge.swift in Sources */,
+				B01000132900000100000001 /* SecuritySettingsView.swift in Sources */,
+				B01000142900000100000001 /* AddFileMenuSheet.swift in Sources */,
+				B01000152900000100000001 /* StorageSecurityAuditSheet.swift in Sources */,
+				B01000162900000100000001 /* VaultFileRow.swift in Sources */,
+				B01000172900000100000001 /* VaultHomeView.swift in Sources */,
+				B01000182900000100000001 /* SecureFileViewerContainer.swift in Sources */,
+				B01000192900000100000001 /* SecureImageViewer.swift in Sources */,
+				B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */,
+				B010001B2900000100000001 /* SecureTextViewer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C01000032900000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C01000042900000100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Release;
+		};
+		C01000052900000100000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ZeroVault/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zerovault.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Debug;
+		};
+		C01000062900000100000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ZeroVault/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zerovault.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01000012900000100000001 /* Build configuration list for PBXNativeTarget "ZeroVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01000052900000100000001 /* Debug */,
+				C01000062900000100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01000022900000100000001 /* Build configuration list for PBXProject "ZeroVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01000032900000100000001 /* Debug */,
+				C01000042900000100000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 001000012900000100000001 /* Project object */;
+}

@@ -1,0 +1,73 @@
+name: Build & Package ZeroVault
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: Build ZeroVault iOS App & Package IPA
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Show Xcode Version & Schemes
+        run: |
+          xcodebuild -version
+          xcodebuild -list -project ZeroVault.xcodeproj
+
+      - name: Build Native ARM64 iOS App (Physical Device)
+        run: |
+          set -o pipefail
+          mkdir -p build
+          xcodebuild archive \
+            -project ZeroVault.xcodeproj \
+            -scheme ZeroVault \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/ZeroVault.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            VALIDATE_PRODUCT=NO \
+            PROVISIONING_PROFILE_SPECIFIER="" 2>&1 | tee build.log
+
+      - name: Diagnostic on Build Failure
+        if: failure()
+        run: |
+          echo "=== RECENT BUILD LOG OUTPUT ==="
+          tail -n 120 build.log || true
+          echo "=== DETECTED COMPILATION ERRORS ==="
+          grep -E "error:" build.log || true
+
+      - name: Package Native ARM64 iOS IPA
+        run: |
+          mkdir -p build/Payload
+          cp -r "$RUNNER_TEMP/ZeroVault.xcarchive/Products/Applications/ZeroVault.app" build/Payload/
+
+          echo "=== Binary & Info.plist Inspection ==="
+          plutil -p build/Payload/ZeroVault.app/Info.plist | grep -E "CFBundleSupportedPlatforms|DTPlatformName|UIDeviceFamily|UIFileSharingEnabled|LSSupportsOpeningDocumentsInPlace" || true
+
+          cd build
+          zip -r -X ZeroVault.ipa Payload
+          cd ..
+          ls -lh build/ZeroVault.ipa
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZeroVault-IPA
+          path: build/ZeroVault.ipa
+          retention-days: 14
+
+      - name: Upload xcarchive (Full Native Archive)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZeroVault-xcarchive
+          path: ${{ runner.temp }}/ZeroVault.xcarchive
+          retention-days: 7

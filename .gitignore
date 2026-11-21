@@ -1,0 +1,22 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+*.xcuserdatad
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Archives & Temporary outputs
+*.ipa
+*.xcarchive
+*.dSYM.zip
+*.dSYM
+
+# Fastlane / CI local artifacts
+.build/
+.swiftpm/

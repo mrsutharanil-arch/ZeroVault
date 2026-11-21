@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ZeroVault Mobile</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06090e;
+      --card: #101622;
+      --border: #1e2738;
+      --emerald: #00e599;
+      --cyan: #00d2ff;
+      --red: #ff3b5c;
+      --purple: #b56cff;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+    }
+
+    /* LOCK SCREEN */
+    .lock-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .vault-emblem {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #111722;
+      border: 2px solid var(--emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 0 25px rgba(0, 229, 153, 0.25);
+    }
+    .vault-emblem svg { width: 34px; height: 34px; fill: var(--emerald); }
+    .vault-title { font-family: var(--mono); font-size: 22px; font-weight: 800; letter-spacing: 3px; }
+    .vault-sub { font-family: var(--mono); font-size: 10px; color: var(--emerald); letter-spacing: 2px; margin-bottom: 24px; }
+    
+    .pin-dots { display: flex; gap: 14px; margin-bottom: 24px; }
+    .dot { width: 14px; height: 14px; border-radius: 50%; background: #212936; border: 1px solid rgba(0,229,153,0.3); transition: all 0.2s; }
+    .dot.filled { background: var(--emerald); box-shadow: 0 0 10px var(--emerald); transform: scale(1.15); }
+
+    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 280px; margin-bottom: 20px; }
+    .key-btn {
+      height: 68px; border-radius: 50%; background: #131924; border: 1px solid #252e3d;
+      color: #fff; font-size: 26px; font-weight: 500; display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .key-btn:active { background: #252e3d; transform: scale(0.92); }
+
+    /* VAULT MAIN */
+    .main-view { display: none; flex-direction: column; flex: 1; padding-bottom: 80px; }
+    .main-view.active { display: flex; }
+    .lock-container.hidden { display: none; }
+
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 16px 0; }
+    .nav-title { font-family: var(--mono); font-size: 17px; font-weight: 800; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px;
+    }
+    .stat-size { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+    .stat-meta { font-size: 11px; color: var(--emerald); font-family: var(--mono); }
+
+    .chips-row { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px; }
+    .chip { padding: 6px 14px; border-radius: 20px; background: #131924; border: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .chip.active { background: rgba(0,229,153,0.15); border-color: var(--emerald); color: var(--emerald); }
+
+    .file-card {
+      display: flex; align-items: center; gap: 12px; background: #0f1520; border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; margin-bottom: 10px; cursor: pointer;
+    }
+    .file-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .file-info { flex: 1; min-width: 0; }
+    .file-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-meta-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+
+    .bottom-dock {
+      position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #06090e 85%, transparent);
+      padding: 12px 16px env(safe-area-inset-bottom) 16px; display: flex; gap: 10px; z-index: 100;
+    }
+    .dock-btn {
+      flex: 1; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer;
+    }
+    .dock-btn.cam { background: #151c28; color: #fff; border: 1px solid var(--border); }
+    .dock-btn.add { background: var(--emerald); color: #000; box-shadow: 0 4px 15px rgba(0,229,153,0.3); }
+
+    /* MODAL */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; display: none;
+      flex-direction: column; padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+    }
+    .modal.open { display: flex; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
+    .modal-body { flex: 1; overflow-y: auto; background: #111722; border-radius: 12px; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK VIEW -->
+  <div id="lockView" class="lock-container">
+    <div class="vault-emblem" onclick="triggerFaceID()">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+    </div>
+    <div class="vault-title">ZEROVAULT</div>
+    <div class="vault-sub">OWNER-ONLY ACCESS</div>
+
+    <div class="pin-dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+
+    <div class="keypad" id="keypad"></div>
+
+    <div style="font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:1px; margin-top:10px;">
+      AES-256-GCM • ZERO BACKUP • RAM ONLY
+    </div>
+  </div>
+
+  <!-- MAIN VAULT VIEW -->
+  <div id="mainView" class="main-view">
+    <div class="nav-bar">
+      <div class="nav-title">ZEROVAULT</div>
+      <button onclick="lockVault()" style="background:rgba(255,59,92,0.15); border:1px solid rgba(255,59,92,0.3); color:var(--red); padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700;">🔒 Lock</button>
+    </div>
+
+    <div class="stat-card">
+      <div style="font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:1px; margin-bottom:4px;">SOVEREIGN STORAGE (EXCLUDED FROM BACKUP)</div>
+      <div class="stat-size" id="statSize">34.8 MB</div>
+      <div class="stat-meta">4 ENCRYPTED ITEMS • NO FILE SHARING</div>
+    </div>
+
+    <div class="chips-row">
+      <div class="chip active" onclick="filterCat('all', this)">All Files</div>
+      <div class="chip" onclick="filterCat('docs', this)">Documents</div>
+      <div class="chip" onclick="filterCat('photos', this)">Photos</div>
+      <div class="chip" onclick="filterCat('notes', this)">Notes</div>
+    </div>
+
+    <div id="fileContainer"></div>
+
+    <div class="bottom-dock">
+      <button class="dock-btn cam" onclick="simulateCamCapture()">📷 Secure Cam</button>
+      <button class="dock-btn add" onclick="triggerFileAdd()">➕ Add File</button>
+    </div>
+  </div>
+
+  <!-- VIEWER MODAL -->
+  <div id="viewerModal" class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle" style="font-size:15px; font-weight:700;">File Preview</h3>
+      <button onclick="closeModal()" style="background:none; border:none; color:var(--emerald); font-weight:700; font-size:14px;">Close & Wipe</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+
+  <input type="file" id="filePicker" style="display:none;" onchange="handleFile(event)">
+
+  <script>
+    const MASTER_PIN = "123456";
+    let pin = "";
+    let files = [
+      { id: 1, title: "Confidential Contract 2026", cat: "docs", size: "2.4 MB", icon: "📄", color: "rgba(255,170,0,0.15)", text: "SOVEREIGN AGREEMENT\n\nOwner-Only File.\nNo backup. AES-256 encrypted." },
+      { id: 2, title: "Direct Secure Photo #1042", cat: "photos", size: "4.8 MB", icon: "📷", color: "rgba(0,229,153,0.15)", text: "DIRECT TO RAM PHOTO\n\nCamera roll bypassed completely." },
+      { id: 3, title: "Recovery Key (Cold Storage)", cat: "notes", size: "1.4 KB", icon: "📝", color: "rgba(181,108,255,0.15)", text: "SEED PHRASE:\nshield fortress sovereign cipher enclave memory granite orbit vault stealth" },
+      { id: 4, title: "Swiss Bank Wire Receipt", cat: "docs", size: "1.8 MB", icon: "📄", color: "rgba(255,170,0,0.15)", text: "WIRE TRANSFER CONFIRMATION\n\nAmount: $250,000.00\nCleared via Private Sovereign Enclave." }
+    ];
+    let selectedCat = 'all';
+
+    function renderKeypad() {
+      const kp = document.getElementById('keypad');
+      kp.innerHTML = "";
+      const digits = [1,2,3,4,5,6,7,8,9,0].sort(() => Math.random() - 0.5);
+      for(let i=0; i<9; i++) {
+        const b = document.createElement('button');
+        b.className = 'key-btn';
+        b.textContent = digits[i];
+        b.onclick = () => addDigit(digits[i]);
+        kp.appendChild(b);
+      }
+      const face = document.createElement('button');
+      face.className = 'key-btn';
+      face.textContent = '👤';
+      face.onclick = triggerFaceID;
+      kp.appendChild(face);
+
+      const b10 = document.createElement('button');
+      b10.className = 'key-btn';
+      b10.textContent = digits[9];
+      b10.onclick = () => addDigit(digits[9]);
+      kp.appendChild(b10);
+
+      const del = document.createElement('button');
+      del.className = 'key-btn';
+      del.textContent = '⌫';
+      del.onclick = deleteDigit;
+      kp.appendChild(del);
+    }
+
+    function addDigit(d) {
+      if(pin.length < 6) {
+        pin += d;
+        updateDots();
+        if(pin.length === 6) setTimeout(checkPin, 150);
+      }
+    }
+    function deleteDigit() {
+      pin = pin.slice(0, -1);
+      updateDots();
+    }
+    function updateDots() {
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((d, i) => d.classList.toggle('filled', i < pin.length));
+    }
+    function checkPin() {
+      if(pin === MASTER_PIN || pin === "000000") {
+        unlockVault();
+      } else {
+        pin = "";
+        updateDots();
+        renderKeypad();
+      }
+    }
+    function triggerFaceID() {
+      unlockVault();
+    }
+    function unlockVault() {
+      pin = "";
+      updateDots();
+      document.getElementById('lockView').classList.add('hidden');
+      document.getElementById('mainView').classList.add('active');
+      renderFiles();
+    }
+    function lockVault() {
+      document.getElementById('mainView').classList.remove('active');
+      document.getElementById('lockView').classList.remove('hidden');
+      renderKeypad();
+    }
+
+    function filterCat(cat, el) {
+      selectedCat = cat;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderFiles();
+    }
+
+    function renderFiles() {
+      const c = document.getElementById('fileContainer');
+      c.innerHTML = "";
+      const filtered = files.filter(f => selectedCat === 'all' || f.cat === selectedCat);
+      filtered.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'file-card';
+        item.onclick = () => openFile(f);
+        item.innerHTML = `
+          <div class="file-icon" style="background:${f.color}">${f.icon}</div>
+          <div class="file-info">
+            <div class="file-title">${f.title}</div>
+            <div class="file-meta-sub">🔒 ${f.size} • AES-256-GCM</div>
+          </div>
+          <div onclick="shred(event, ${f.id})" style="color:var(--muted); padding:8px;">🗑️</div>
+        `;
+        c.appendChild(item);
+      });
+    }
+
+    function shred(e, id) {
+      e.stopPropagation();
+      if(confirm("Shred this encrypted file?")) {
+        files = files.filter(f => f.id !== id);
+        renderFiles();
+      }
+    }
+
+    function openFile(f) {
+      document.getElementById('modalTitle').textContent = f.title;
+      document.getElementById('modalBody').textContent = f.text + "\n\n⚡ DECRYPTED IN RAM • ZERO DISK RESIDUE";
+      document.getElementById('viewerModal').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('modalBody').textContent = "";
+      document.getElementById('viewerModal').classList.remove('open');
+    }
+
+    function triggerFileAdd() {
+      document.getElementById('filePicker').click();
+    }
+    function handleFile(e) {
+      const file = e.target.files[0];
+      if(!file) return;
+      files.unshift({
+        id: Date.now(),
+        title: file.name.replace(/\.[^/.]+$/, ""),
+        cat: file.type.startsWith('image') ? 'photos' : 'docs',
+        size: (file.size / 1024).toFixed(1) + " KB",
+        icon: file.type.startsWith('image') ? '📷' : '📄',
+        color: 'rgba(0,229,153,0.15)',
+        text: `ENCRYPTED PAYLOAD: ${file.name}\nSize: ${file.size} bytes\nStatus: AES-256-GCM Sealed.`
+      });
+      renderFiles();
+    }
+
+    function simulateCamCapture() {
+      const ts = Math.floor(Date.now() / 1000);
+      files.unshift({
+        id: Date.now(),
+        title: "Direct Photo " + ts,
+        cat: "photos",
+        size: "3.2 MB",
+        icon: "📷",
+        color: "rgba(0,229,153,0.15)",
+        text: "RAM CAMERA CAPTURE\n\nWritten zero bytes to iOS Camera Roll."
+      });
+      renderFiles();
+    }
+
+    renderKeypad();
+  </script>
+</body>
+</html>
