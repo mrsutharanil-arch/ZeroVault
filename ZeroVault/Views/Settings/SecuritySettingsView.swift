@@ -16,6 +16,7 @@ public struct SecuritySettingsView: View {
     @State private var showingChangePin: Bool = false
     @State private var showingDecoySetup: Bool = false
     @State private var showingPanicConfirm: Bool = false
+    @State private var showingDeveloperProfile: Bool = false
     @State private var decoyPinInput: String = ""
     
     public init(appState: AppState, vaultVM: VaultViewModel) {
@@ -134,7 +135,37 @@ public struct SecuritySettingsView: View {
                     }
                     .listRowBackground(Color(white: 0.09))
                     
-                    // MARK: - Section 5: Architecture Info
+                    // MARK: - Section 5: Company & Developer Profile
+                    Section(header: Text("DEVELOPER & COMPANY PROFILE").foregroundColor(.gray)) {
+                        Button(action: { showingDeveloperProfile = true }) {
+                            HStack(spacing: 12) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(red: 0.2, green: 0.8, blue: 0.6).opacity(0.15))
+                                        .frame(width: 36, height: 36)
+                                    Image(systemName: "person.badge.shield.checkmark.fill")
+                                        .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Arch Technologies")
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundColor(.white)
+                                    Text("Lead Architect: Anil Suthar (@mrsutharanil-arch)")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                    }
+                    .listRowBackground(Color(white: 0.09))
+                    
+                    // MARK: - Section 6: Architecture Info
                     Section(header: Text("ZERO-KNOWLEDGE ARCHITECTURE").foregroundColor(.gray)) {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("ZeroVault 1.0.0 (Build 1)")
@@ -171,6 +202,9 @@ public struct SecuritySettingsView: View {
                     },
                     secondaryButton: .cancel()
                 )
+            }
+            .sheet(isPresented: $showingDeveloperProfile) {
+                DeveloperProfileView()
             }
             .sheet(isPresented: $showingDecoySetup) {
                 NavigationStack {

@@ -34,6 +34,7 @@
 		B01000192900000100000001 /* SecureImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000192900000100000001 /* SecureImageViewer.swift */; };
 		B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001A2900000100000001 /* SecurePDFViewer.swift */; };
 		B010001B2900000100000001 /* SecureTextViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001B2900000100000001 /* SecureTextViewer.swift */; };
+		B010001D2900000100000001 /* DeveloperProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001D2900000100000001 /* DeveloperProfileView.swift */; };
 		B010001C2900000100000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F010001C2900000100000001 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		F01000192900000100000001 /* SecureImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureImageViewer.swift; sourceTree = "<group>"; };
 		F010001A2900000100000001 /* SecurePDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurePDFViewer.swift; sourceTree = "<group>"; };
 		F010001B2900000100000001 /* SecureTextViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureTextViewer.swift; sourceTree = "<group>"; };
+		F010001D2900000100000001 /* DeveloperProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperProfileView.swift; sourceTree = "<group>"; };
 		F010001C2900000100000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				F01000132900000100000001 /* SecuritySettingsView.swift */,
+				F010001D2900000100000001 /* DeveloperProfileView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				B01000192900000100000001 /* SecureImageViewer.swift in Sources */,
 				B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */,
 				B010001B2900000100000001 /* SecureTextViewer.swift in Sources */,
+				B010001D2900000100000001 /* DeveloperProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

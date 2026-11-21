@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="ZeroVault Logo" width="140" height="140" style="border-radius: 32px; box-shadow: 0 10px 30px rgba(0, 229, 153, 0.3);"/>
+</p>
+
 # ZeroVault 🛡️
 ### Sovereign Owner-Only Encrypted File Fortress for iOS
 
@@ -159,3 +163,14 @@ ZeroVault includes a **full interactive web simulator** so you can test the owne
 * **Direct Secure Camera**: Takes direct snapshots to memory and encrypts them without touching public photos.
 * **Security Audit Verification**: Click the shield badge to inspect live proof of `NSURLIsExcludedFromBackupKey = true` and `UIFileSharingEnabled = false`.
 * **Privacy Shield**: Test the App Switcher blackout overlay.
+
+---
+
+## 🏢 Company & Developer Profile
+
+* **Company**: **Arch Technologies**
+* **Lead Architect & Developer**: **Anil Suthar**
+* **GitHub Profile**: [@mrsutharanil-arch](https://github.com/mrsutharanil-arch)
+* **Company Manifesto**: Read the full [COMPANY_PROFILE.md](file:///F:/ios/ZeroVault/COMPANY_PROFILE.md)
+* **Design & Branding**: Vector assets & high-resolution Canva-compatible logo specifications included.
+* **License**: Sovereign Open Security Architecture. All rights reserved © 2026 Arch Technologies.
