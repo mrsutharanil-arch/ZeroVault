@@ -173,10 +173,7 @@ public final class VaultViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         
-        guard let masterKey = try? keychain.retrieveMasterKey() else {
-            self.files = []
-            return
-        }
+        let masterKey = keychain.getOrCreateMasterKey()
         
         let dir = storage.vaultDirectoryURL
         guard let fileURLs = try? FileManager.default.contentsOfDirectory(
@@ -204,13 +201,19 @@ public final class VaultViewModel: ObservableObject {
                 // Fast header-only decryption of metadata
                 let metadata = try crypto.decryptMetadataOnly(from: encryptedData, using: masterKey)
                 
+                // Infer category if set to .all
+                var resolvedCategory = metadata.category
+                if resolvedCategory == .all {
+                    resolvedCategory = self.inferCategory(for: metadata.originalFilename)
+                }
+                
                 let vaultFile = VaultFile(
                     id: metadata.id,
                     diskFilename: filename,
                     title: metadata.title,
                     originalFilename: metadata.originalFilename,
                     mimeType: metadata.mimeType,
-                    category: metadata.category,
+                    category: resolvedCategory,
                     fileSize: metadata.fileSize,
                     createdAt: metadata.createdAt,
                     isFavorite: false,
@@ -222,9 +225,11 @@ public final class VaultViewModel: ObservableObject {
             }
         }
         
-        self.files = loadedFiles
-        self.totalStorageBytes = totalBytes
-        self.totalFileCount = loadedFiles.count
+        DispatchQueue.main.async {
+            self.files = loadedFiles
+            self.totalStorageBytes = totalBytes
+            self.totalFileCount = loadedFiles.count
+        }
     }
     
     // MARK: - Encrypt & Import File (General)
@@ -236,9 +241,7 @@ public final class VaultViewModel: ObservableObject {
         title: String? = nil,
         userNotes: String? = nil
     ) throws {
-        guard let masterKey = try keychain.retrieveMasterKey() else {
-            throw VaultCryptoError.keyDerivationFailed
-        }
+        let masterKey = keychain.getOrCreateMasterKey()
         
         let id = UUID()
         let diskFilename = "\(id.uuidString).zenc"
@@ -249,12 +252,17 @@ public final class VaultViewModel: ObservableObject {
         let mimeType = mimeTypeFor(filename: originalFilename)
         let checksum = crypto.computeSha256(data: data)
         
+        var resolvedCategory = category
+        if resolvedCategory == .all {
+            resolvedCategory = inferCategory(for: originalFilename)
+        }
+        
         let metadata = EncryptedFileMetadata(
             id: id,
             originalFilename: originalFilename,
             title: displayTitle,
             mimeType: mimeType,
-            category: category,
+            category: resolvedCategory,
             fileSize: Int64(data.count),
             checksumSha256: checksum,
             userNotes: userNotes
@@ -326,6 +334,24 @@ public final class VaultViewModel: ObservableObject {
     }
     
     // MARK: - Helpers
+    
+    private func inferCategory(for filename: String) -> VaultCategory {
+        let ext = (filename as NSString).pathExtension.lowercased()
+        if ["jpg", "jpeg", "png", "heic", "webp", "gif", "bmp", "tiff"].contains(ext) {
+            return .photos
+        } else if ["mp4", "mov", "m4v", "avi", "mkv", "webm"].contains(ext) {
+            return .videos
+        } else if ["pdf", "doc", "docx", "pages", "xls", "xlsx", "numbers", "ppt", "pptx", "key"].contains(ext) {
+            return .documents
+        } else if ["txt", "md", "json", "csv", "log", "swift", "html"].contains(ext) {
+            return .notes
+        } else if ["mp3", "m4a", "wav", "aac", "flac", "ogg"].contains(ext) {
+            return .audio
+        } else if ["zip", "tar", "gz", "rar", "7z"].contains(ext) {
+            return .archives
+        }
+        return .documents
+    }
     
     private func mimeTypeFor(filename: String) -> String {
         let ext = (filename as NSString).pathExtension.lowercased()

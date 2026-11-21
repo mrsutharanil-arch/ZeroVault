@@ -50,6 +50,8 @@
 	<!-- 6. Optional Photo Import (Requires explicit owner action to import & securely shred from Camera Roll) -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ZeroVault requires access only when you explicitly select a photo to import and encrypt into your private vault.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>ZeroVault requires access to securely manage photos from your photo library when explicitly selected.</string>
 	
 	<key>UIApplicationSceneManifest</key>
 	<dict>

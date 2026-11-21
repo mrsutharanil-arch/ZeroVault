@@ -81,6 +81,9 @@ public struct VaultHomeView: View {
                 }
             }
             .navigationBarHidden(true)
+            .onAppear {
+                vaultVM.loadVaultFiles()
+            }
             .sheet(isPresented: $showingAddMenu) {
                 AddFileMenuSheet(vaultVM: vaultVM)
             }

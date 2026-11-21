@@ -20,6 +20,8 @@ struct ZeroVaultApp: App {
     init() {
         // Enforce storage isolation directory and no-backup flags upon boot
         StorageSecurityService.shared.createSecureVaultDirectoryIfNeeded()
+        // Ensure master encryption key & default sovereign credentials exist
+        AuthenticationService.shared.ensureInitialMasterSecurity()
     }
     
     var body: some Scene {

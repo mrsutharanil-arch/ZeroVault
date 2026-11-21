@@ -38,6 +38,22 @@ public final class SecureCameraService: NSObject, ObservableObject {
     // MARK: - Setup Session
     
     public func configureSession() {
+        let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        switch authStatus {
+        case .authorized:
+            setupCaptureSessionInternal()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                if granted {
+                    self?.setupCaptureSessionInternal()
+                }
+            }
+        default:
+            print("Camera access not authorized")
+        }
+    }
+    
+    private func setupCaptureSessionInternal() {
         sessionQueue.async { [weak self] in
             guard let self = self else { return }
             self.captureSession.beginConfiguration()

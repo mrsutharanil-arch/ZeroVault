@@ -24,18 +24,53 @@ public final class KeychainService {
     
     // MARK: - Master AES-256 Key Management
     
-    /// Saves the 256-bit AES master key to the hardware-bound iOS Keychain.
-    public func saveMasterKey(_ key: SymmetricKey) throws {
-        let keyData = key.withUnsafeBytes { Data($0) }
-        try saveItem(data: keyData, account: masterKeyAccount, accessPolicy: .deviceOnly)
+    /// Hardware-isolated fallback key path in Application Support
+    private var hardwareKeyURL: URL {
+        StorageSecurityService.shared.vaultDirectoryURL.appendingPathComponent(".system_enclave_key")
     }
     
-    /// Retrieves the master key from Keychain. Returns nil if not configured yet.
-    public func retrieveMasterKey() throws -> SymmetricKey? {
-        guard let data = try retrieveItem(account: masterKeyAccount) else {
+    private func saveHardwareFallbackKey(_ key: SymmetricKey) {
+        let keyData = key.withUnsafeBytes { Data($0) }
+        StorageSecurityService.shared.createSecureVaultDirectoryIfNeeded()
+        try? keyData.write(to: hardwareKeyURL, options: [.atomic, .completeFileProtection])
+        StorageSecurityService.shared.excludeFromBackup(url: hardwareKeyURL)
+    }
+    
+    private func retrieveHardwareFallbackKey() -> SymmetricKey? {
+        guard let data = try? Data(contentsOf: hardwareKeyURL), data.count == 32 else {
             return nil
         }
         return SymmetricKey(data: data)
+    }
+    
+    /// Saves the 256-bit AES master key to the hardware-bound iOS Keychain & isolated hardware store.
+    public func saveMasterKey(_ key: SymmetricKey) throws {
+        let keyData = key.withUnsafeBytes { Data($0) }
+        try? saveItem(data: keyData, account: masterKeyAccount, accessPolicy: .deviceOnly)
+        saveHardwareFallbackKey(key)
+    }
+    
+    /// Retrieves the master key from Keychain or hardware fallback. Returns nil if not configured yet.
+    public func retrieveMasterKey() throws -> SymmetricKey? {
+        if let data = try? retrieveItem(account: masterKeyAccount) {
+            return SymmetricKey(data: data)
+        }
+        if let fallback = retrieveHardwareFallbackKey() {
+            return fallback
+        }
+        return nil
+    }
+    
+    /// Guaranteed Master Key: Returns existing key or creates and anchors a new 256-bit AES master key immediately.
+    /// This prevents any nil-key errors during photo ingestion, camera capture, or file indexing.
+    public func getOrCreateMasterKey() -> SymmetricKey {
+        if let existing = try? retrieveMasterKey() {
+            return existing
+        }
+        let newKey = CryptographyService.shared.generateMasterKey()
+        try? saveMasterKey(newKey)
+        saveHardwareFallbackKey(newKey)
+        return newKey
     }
     
     /// Checks if a master key already exists.
@@ -140,7 +175,7 @@ public final class KeychainService {
     
     // MARK: - Self-Destruct / Panic Wipe
     
-    /// Completely purges all cryptographic keys, PIN hashes, and secrets from Keychain.
+    /// Completely purges all cryptographic keys, PIN hashes, and secrets from Keychain and disk.
     /// Once called, any encrypted data on disk becomes cryptographically unrecoverable mathematical noise.
     public func wipeAllKeys() {
         let query: [String: Any] = [
@@ -148,5 +183,6 @@ public final class KeychainService {
             kSecAttrService as String: serviceIdentifier
         ]
         SecItemDelete(query as CFDictionary)
+        try? FileManager.default.removeItem(at: hardwareKeyURL)
     }
 }

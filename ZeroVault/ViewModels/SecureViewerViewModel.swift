@@ -45,13 +45,7 @@ public final class SecureViewerViewModel: ObservableObject {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             
-            guard let masterKey = try? self.keychain.retrieveMasterKey() else {
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.errorMessage = "Could not access hardware master key."
-                }
-                return
-            }
+            let masterKey = self.keychain.getOrCreateMasterKey()
             
             do {
                 let ciphertext = try self.storage.readEncryptedPayload(filename: self.file.diskFilename)

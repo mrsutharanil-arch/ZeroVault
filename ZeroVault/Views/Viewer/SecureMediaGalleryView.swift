@@ -239,5 +239,13 @@ struct GalleryPageItem: View {
                 }
             }
         }
+        .onAppear {
+            if viewerVM.decryptedImage == nil && viewerVM.decryptedData == nil {
+                viewerVM.decryptFileInRAM()
+            }
+        }
+        .onDisappear {
+            viewerVM.purgeFromMemory()
+        }
     }
 }

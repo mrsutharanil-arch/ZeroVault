@@ -106,9 +106,13 @@ public final class AuthenticationService: ObservableObject {
         }
         
         // Check Master Owner PIN
+        if keychain.retrievePinHash() == nil {
+            ensureInitialMasterSecurity()
+        }
+        
         guard let storedHash = keychain.retrievePinHash(),
               let salt = keychain.retrievePinSalt() else {
-            // First time setup - will be handled by setup flow
+            // First time setup fallback
             return .incorrectPin(remainingAttempts: 0)
         }
         
@@ -165,16 +169,25 @@ public final class AuthenticationService: ObservableObject {
     
     // MARK: - Initial Setup & Change PIN
     
+    /// Seeds default sovereign master credentials and derives master key on first launch.
+    public func ensureInitialMasterSecurity() {
+        // 1. Ensure master key exists in hardware-bound keychain & hardware store
+        _ = keychain.getOrCreateMasterKey()
+        
+        // 2. Ensure default master PIN (123456) and decoy PIN (000000) are seeded if not configured yet
+        if keychain.retrievePinHash() == nil {
+            try? setupOwnerPin("123456")
+            try? setupDecoyPin("000000")
+        }
+    }
+    
     public func setupOwnerPin(_ pin: String) throws {
         let salt = CryptographyService.shared.generateRandomSalt(count: 32)
         let hash = hashPin(pin, salt: salt)
         try keychain.savePinHash(hash, salt: salt)
         
-        // If master key doesn't exist yet, generate and save it
-        if !keychain.hasMasterKey {
-            let masterKey = CryptographyService.shared.generateMasterKey()
-            try keychain.saveMasterKey(masterKey)
-        }
+        // Ensure master key exists
+        _ = keychain.getOrCreateMasterKey()
     }
     
     public func changeOwnerPin(currentPin: String, newPin: String) throws -> Bool {

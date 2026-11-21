@@ -46,7 +46,7 @@ public final class CryptographyService {
     // MARK: - Encryption (Sealing)
     
     /// Encrypts raw in-memory file payload and metadata using AES-256-GCM.
-    /// Produces a sealed cryptographic package containing authenticated data and tag.
+    /// Produces an authenticated sealed package containing independent tags for metadata and payload.
     public func encrypt(
         payload: Data,
         metadata: EncryptedFileMetadata,
@@ -60,25 +60,17 @@ public final class CryptographyService {
         // 2. Generate unique cryptographic Nonce for AES-GCM (96 bits / 12 bytes)
         let nonce = AES.GCM.Nonce()
         
-        // 3. Encrypt the Metadata JSON with AES-256-GCM using metadata-specific subkey
-        let metaKey = HKDF<SHA256>.deriveKey(
-            inputKeyMaterial: masterKey,
-            salt: metadata.id.uuidString.data(using: .utf8)!,
-            info: "ZeroVault.MetadataSubkey".data(using: .utf8)!,
-            outputByteCount: 32
-        )
-        let sealedMetadataBox = try AES.GCM.seal(metadataJson, using: metaKey, nonce: nonce)
+        // 3. Encrypt the Metadata JSON with AES-256-GCM using masterKey
+        let sealedMetadataBox = try AES.GCM.seal(metadataJson, using: masterKey, nonce: nonce)
         
-        // 4. Encrypt the actual File Payload with AES-256-GCM
-        // We bind the file ID as Authenticated Additional Data (AAD) to prevent ciphertext transplantation
-        let aadData = metadata.id.uuidString.data(using: .utf8)!
-        let sealedPayloadBox = try AES.GCM.seal(payload, using: masterKey, nonce: nonce, authenticating: aadData)
+        // 4. Encrypt the actual File Payload with AES-256-GCM, cryptographically binding metadata tag as AAD
+        let sealedPayloadBox = try AES.GCM.seal(payload, using: masterKey, nonce: nonce, authenticating: sealedMetadataBox.tag)
         
-        // 5. Assemble into the ZeroVault sealed package structure
+        // 5. Assemble into the ZeroVault sealed package structure (v2)
         let package = VaultSealedPackage(
-            header: VaultEnvelopeHeader.magicBytes + [VaultEnvelopeHeader.formatVersion],
             nonce: Data(nonce),
-            tag: sealedPayloadBox.tag,
+            metaTag: sealedMetadataBox.tag,
+            payloadTag: sealedPayloadBox.tag,
             encryptedMetadata: sealedMetadataBox.ciphertext,
             encryptedPayload: sealedPayloadBox.ciphertext
         )
@@ -101,71 +93,47 @@ public final class CryptographyService {
             throw VaultCryptoError.corruptedFile("Invalid cryptographic nonce")
         }
         
-        // 2. Decrypt metadata first to extract file ID
-        // Note: For metadata, we use the combined seal format
-        // We reconstruct the sealed box for metadata
-        // The metadata subkey uses the file payload nonce
-        // Since we need the file ID to derive metaKey, we decrypt using masterKey or extract from AAD
-        // To be completely robust and self-contained:
-        // We derive metadata subkey directly with general info or masterKey
-        let metaKey = HKDF<SHA256>.deriveKey(
-            inputKeyMaterial: masterKey,
-            info: "ZeroVault.MetadataDirectKey".data(using: .utf8)!,
-            outputByteCount: 32
-        )
-        
-        // Try direct metadata opening or fallback
-        var metadataJson: Data?
-        if let metaBox = try? AES.GCM.SealedBox(nonce: nonce, ciphertext: package.encryptedMetadata, tag: package.tag) {
-            metadataJson = try? AES.GCM.open(metaBox, using: masterKey)
-        }
-        
-        // If the combined box opened or we decrypt metadata directly:
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        let metadata: EncryptedFileMetadata
-        if let validMetaJson = metadataJson, let meta = try? decoder.decode(EncryptedFileMetadata.self, from: validMetaJson) {
-            metadata = meta
-        } else {
-            // Reconstruct payload sealed box
-            let sealedPayloadBox = try AES.GCM.SealedBox(
-                nonce: nonce,
-                ciphertext: package.encryptedPayload,
-                tag: package.tag
-            )
-            
-            // Decrypt with master key
-            let decryptedPayload = try AES.GCM.open(sealedPayloadBox, using: masterKey)
-            
-            // Reconstruct minimal metadata if needed
-            let fallbackMeta = EncryptedFileMetadata(
-                originalFilename: "decrypted_file",
-                title: "Encrypted Item",
-                mimeType: "application/octet-stream",
-                category: .documents,
-                fileSize: Int64(decryptedPayload.count),
-                checksumSha256: SHA256.hash(data: decryptedPayload).description
-            )
-            return (payload: decryptedPayload, metadata: fallbackMeta)
-        }
-        
-        // Decrypt payload with AAD verification
-        let aadData = metadata.id.uuidString.data(using: .utf8)!
-        let sealedPayloadBox = try AES.GCM.SealedBox(
-            nonce: nonce,
-            ciphertext: package.encryptedPayload,
-            tag: package.tag
+        // 2. Decrypt metadata
+        var metadata = EncryptedFileMetadata(
+            originalFilename: "decrypted_file",
+            title: "Encrypted Secure File",
+            mimeType: "application/octet-stream",
+            category: .documents,
+            fileSize: Int64(package.encryptedPayload.count),
+            checksumSha256: ""
         )
         
-        do {
-            let decryptedPayload = try AES.GCM.open(sealedPayloadBox, using: masterKey, authenticating: aadData)
-            return (payload: decryptedPayload, metadata: metadata)
-        } catch {
-            // Attempt without AAD for maximum backwards compatibility
-            let decryptedPayload = try AES.GCM.open(sealedPayloadBox, using: masterKey)
-            return (payload: decryptedPayload, metadata: metadata)
+        // Open metadata sealed box using dedicated metaTag
+        if let metaBox = try? AES.GCM.SealedBox(nonce: nonce, ciphertext: package.encryptedMetadata, tag: package.metaTag),
+           let metaData = try? AES.GCM.open(metaBox, using: masterKey),
+           let decodedMeta = try? decoder.decode(EncryptedFileMetadata.self, from: metaData) {
+            metadata = decodedMeta
         }
+        
+        // 3. Decrypt payload
+        let payloadBox = try AES.GCM.SealedBox(
+            nonce: nonce,
+            ciphertext: package.encryptedPayload,
+            tag: package.payloadTag
+        )
+        
+        // Fast path: Open payload using metaTag as AAD (v2 format)
+        if let cleartext = try? AES.GCM.open(payloadBox, using: masterKey, authenticating: package.metaTag) {
+            return (payload: cleartext, metadata: metadata)
+        }
+        
+        // Fallback 1: Open with metadata ID as AAD (legacy v1 with ID)
+        let aadData = metadata.id.uuidString.data(using: .utf8)!
+        if let cleartext = try? AES.GCM.open(payloadBox, using: masterKey, authenticating: aadData) {
+            return (payload: cleartext, metadata: metadata)
+        }
+        
+        // Fallback 2: Open directly without AAD
+        let cleartext = try AES.GCM.open(payloadBox, using: masterKey)
+        return (payload: cleartext, metadata: metadata)
     }
     
     // MARK: - Decrypt Metadata Only (For Fast Vault Indexing)
@@ -185,13 +153,14 @@ public final class CryptographyService {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        if let metaBox = try? AES.GCM.SealedBox(nonce: nonce, ciphertext: package.encryptedMetadata, tag: package.tag),
+        // Open metadata sealed box using dedicated metaTag
+        if let metaBox = try? AES.GCM.SealedBox(nonce: nonce, ciphertext: package.encryptedMetadata, tag: package.metaTag),
            let metaData = try? AES.GCM.open(metaBox, using: masterKey),
            let meta = try? decoder.decode(EncryptedFileMetadata.self, from: metaData) {
             return meta
         }
         
-        // Fallback default metadata if metadata block is separate
+        // Fallback default metadata if legacy format
         return EncryptedFileMetadata(
             originalFilename: "secure_payload.bin",
             title: "Encrypted Secure File",
