@@ -6,13 +6,16 @@
   <title>ZeroVault - Sovereign Owner-Only File Fortress (iOS Preview)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=SF+Pro+Display:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/sf-pro-rounded" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/sf-mono" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-space: #07090e;
-      --panel-bg: #0d1117;
-      --card-bg: #141a23;
-      --border-color: #212936;
+      --bg-space: #06090e;
+      --panel-bg: #0b0f17;
+      --card-bg: rgba(20, 26, 38, 0.82);
+      --border-color: rgba(255, 255, 255, 0.08);
       --accent-emerald: #00e599;
       --accent-cyan: #00d2ff;
       --accent-amber: #ffaa00;
@@ -20,8 +23,13 @@
       --accent-purple: #b56cff;
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
-      --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-      --font-mono: "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+      
+      /* LATEST APPLE IOS SF PRO TYPOGRAPHY ATTACHMENT */
+      --font-sf-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "SF Pro", "SF Pro Text", system-ui, sans-serif;
+      --font-sf-rounded: 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro", system-ui, sans-serif;
+      --font-sf-mono: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+      --font-ui: var(--font-sf-display);
+      --font-mono: var(--font-sf-mono);
     }
 
     * {
@@ -233,19 +241,21 @@
       overflow: hidden;
     }
     .lock-title {
-      font-family: var(--font-mono);
-      font-size: 20px;
+      font-family: var(--font-sf-rounded);
+      font-size: 25px;
       font-weight: 800;
-      letter-spacing: 3px;
+      letter-spacing: 1.5px;
       color: #fff;
       margin-bottom: 4px;
     }
     .lock-subtitle {
-      font-family: var(--font-mono);
+      font-family: var(--font-sf-mono);
       font-size: 10px;
+      font-weight: 700;
       color: var(--accent-emerald);
-      letter-spacing: 1.5px;
-      margin-bottom: 20px;
+      letter-spacing: 2px;
+      margin-bottom: 22px;
+      text-transform: uppercase;
     }
     .pin-dots {
       display: flex;
@@ -254,16 +264,16 @@
       margin-bottom: 24px;
     }
     .pin-dot {
-      width: 13px;
-      height: 13px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      background: #212936;
-      border: 1px solid rgba(0, 229, 153, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(0, 229, 153, 0.35);
       transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .pin-dot.filled {
       background: var(--accent-emerald);
-      box-shadow: 0 0 12px var(--accent-emerald);
+      box-shadow: 0 0 14px var(--accent-emerald);
       transform: scale(1.15);
     }
     .keypad-grid {
@@ -274,26 +284,45 @@
       margin: 0 auto 20px auto;
     }
     .keypad-btn {
-      width: 66px;
-      height: 66px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
-      background: #131924;
-      border: 1px solid #252e3d;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #fff;
-      font-size: 24px;
-      font-weight: 500;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.1s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      transition: all 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .keypad-btn:active {
-      background: #252e3d;
+      background: rgba(255, 255, 255, 0.22);
       transform: scale(0.92);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
-    .keypad-btn.action-btn { font-size: 18px; color: var(--accent-emerald); }
-    .keypad-btn.delete-btn { font-size: 18px; color: var(--text-muted); }
+    .keypad-btn .key-num {
+      font-family: var(--font-sf-rounded);
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .keypad-btn .key-sub {
+      font-family: var(--font-sf-display);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+    .keypad-btn.action-btn { color: var(--accent-emerald); }
+    .keypad-btn.delete-btn { color: var(--text-muted); }
 
     /* VAULT HOME */
     .vault-home {
@@ -318,16 +347,17 @@
       border-radius: 8px;
     }
     .vault-brand-text h2 {
-      font-family: var(--font-mono);
-      font-size: 15px;
+      font-family: var(--font-sf-rounded);
+      font-size: 16px;
       font-weight: 800;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
     }
     .vault-brand-text span {
-      font-family: var(--font-mono);
+      font-family: var(--font-sf-mono);
       font-size: 8px;
+      font-weight: 700;
       color: var(--accent-emerald);
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
     .vault-nav-actions {
       display: flex;
@@ -337,33 +367,39 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: #141a23;
-      border: 1px solid #212936;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 13px;
+      transition: all 0.15s;
     }
+    .icon-btn:hover { background: rgba(255, 255, 255, 0.16); }
     .icon-btn.lock-btn {
       color: var(--accent-red);
-      background: rgba(255, 59, 92, 0.1);
-      border-color: rgba(255, 59, 92, 0.3);
+      background: rgba(255, 59, 92, 0.12);
+      border-color: rgba(255, 59, 92, 0.35);
     }
 
     .storage-stat-card {
-      background: linear-gradient(135deg, #101622 0%, #0d121c 100%);
-      border: 1px solid #1f2737;
-      border-radius: 16px;
-      padding: 14px;
+      background: linear-gradient(135deg, rgba(20, 26, 38, 0.85) 0%, rgba(13, 18, 28, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 16px;
       margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
     .stat-label {
-      font-family: var(--font-mono);
+      font-family: var(--font-sf-mono);
       font-size: 9px;
+      font-weight: 700;
       color: var(--text-muted);
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       margin-bottom: 4px;
     }
     .stat-val-row {
@@ -372,8 +408,18 @@
       align-items: baseline;
       margin-bottom: 8px;
     }
-    .stat-size { font-size: 22px; font-weight: 800; color: #fff; }
-    .stat-count { font-size: 12px; color: var(--accent-emerald); font-weight: 600; }
+    .stat-size {
+      font-family: var(--font-sf-rounded);
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .stat-count {
+      font-family: var(--font-sf-rounded);
+      font-size: 13px;
+      color: var(--accent-emerald);
+      font-weight: 700;
+    }
     .stat-meta-pills {
       display: flex;
       gap: 8px;
@@ -381,7 +427,9 @@
       padding-top: 8px;
     }
     .meta-pill {
+      font-family: var(--font-sf-display);
       font-size: 10px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -398,18 +446,20 @@
     }
     .categories-strip::-webkit-scrollbar { display: none; }
     .cat-chip {
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
-      background: #131924;
-      border: 1px solid #202837;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-muted);
-      font-size: 11px;
+      font-family: var(--font-sf-rounded);
+      font-size: 12px;
       font-weight: 600;
       white-space: nowrap;
       cursor: pointer;
+      transition: all 0.15s;
     }
     .cat-chip.active {
-      background: rgba(0, 229, 153, 0.15);
+      background: rgba(0, 229, 153, 0.18);
       border-color: var(--accent-emerald);
       color: var(--accent-emerald);
     }
@@ -1102,6 +1152,19 @@
     }
     setInterval(updateClock, 1000); updateClock();
 
+    const KEYPAD_LETTERS = {
+      1: "",
+      2: "ABC",
+      3: "DEF",
+      4: "GHI",
+      5: "JKL",
+      6: "MNO",
+      7: "PQRS",
+      8: "TUV",
+      9: "WXYZ",
+      0: "+"
+    };
+
     function renderKeypad() {
       const grid = document.getElementById('keypadGrid');
       grid.innerHTML = "";
@@ -1110,26 +1173,26 @@
         const d = state.keypadDigits[i];
         const btn = document.createElement('button');
         btn.className = "keypad-btn";
-        btn.textContent = d;
+        btn.innerHTML = `<span class="key-num">${d}</span><span class="key-sub">${KEYPAD_LETTERS[d] || ""}</span>`;
         btn.onclick = () => appendDigit(d);
         grid.appendChild(btn);
       }
       const faceBtn = document.createElement('button');
       faceBtn.className = "keypad-btn action-btn";
-      faceBtn.innerHTML = "👤";
+      faceBtn.innerHTML = `<span style="font-size:22px; line-height:1;">👤</span><span class="key-sub" style="color:var(--accent-emerald);">FACE ID</span>`;
       faceBtn.onclick = triggerFaceID;
       grid.appendChild(faceBtn);
 
       const d10 = state.keypadDigits[9];
       const btn10 = document.createElement('button');
       btn10.className = "keypad-btn";
-      btn10.textContent = d10;
+      btn10.innerHTML = `<span class="key-num">${d10}</span><span class="key-sub">${KEYPAD_LETTERS[d10] || ""}</span>`;
       btn10.onclick = () => appendDigit(d10);
       grid.appendChild(btn10);
 
       const delBtn = document.createElement('button');
       delBtn.className = "keypad-btn delete-btn";
-      delBtn.innerHTML = "⌫";
+      delBtn.innerHTML = `<span style="font-size:20px; line-height:1;">⌫</span><span class="key-sub">DELETE</span>`;
       delBtn.onclick = deleteDigit;
       grid.appendChild(delBtn);
     }

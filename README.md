@@ -166,6 +166,16 @@ ZeroVault includes a **full interactive web simulator** so you can test the owne
 
 ---
 
+## 🎨 Latest Apple iOS Typography & Front Design
+
+ZeroVault integrates Apple's latest iOS typographic and visual design language:
+* **SF Pro Rounded**: Utilized across hero titles, large storage metric counters, segmented control pills, and lock screen PIN keypad digits.
+* **SF Pro Display / Text**: Dynamic type sizing with optical weight hierarchy (`.heavy`, `.bold`, `.medium`, `.regular`).
+* **SF Mono**: High-precision monospaced numerals for cryptographic nonces, SHA-256 tags, timestamps, and forensic audit indicators.
+* **Liquid Glass Front Design**: iOS 18 frosted glass surfaces (`backdrop-filter: blur(25px)`), authentic Apple keypad letter subtitles (ABC, DEF, GHI...), and continuous squircle corners (`cornerRadius: 14, style: .continuous`).
+
+---
+
 ## 🏢 Company & Developer Profile
 
 * **Company**: **Altexh**

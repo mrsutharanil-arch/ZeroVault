@@ -59,12 +59,12 @@ public struct LockScreenView: View {
                 // Title & Subtitle
                 VStack(spacing: 6) {
                     Text("ZEROVAULT")
-                        .font(.system(size: 24, weight: .black, design: .monospaced))
+                        .font(ZeroVaultFont.heroTitle())
                         .foregroundColor(.white)
-                        .tracking(4)
+                        .tracking(3)
                     
-                    Text(authVM.isSettingUpPin ? (authVM.setupStep == 1 ? "SET MASTER OWNER PIN" : "CONFIRM MASTER PIN") : "OWNER-ONLY ACCESS")
-                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    Text(authVM.isSettingUpPin ? (authVM.setupStep == 1 ? "SET MASTER OWNER PIN" : "CONFIRM MASTER PIN") : "ALTEXH • OWNER SOVEREIGN ACCESS")
+                        .font(ZeroVaultFont.cryptoAudit())
                         .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
                         .tracking(2)
                 }
@@ -107,7 +107,7 @@ public struct LockScreenView: View {
                                 let index = row * 3 + col
                                 if index < authVM.keypadDigits.count {
                                     let digit = authVM.keypadDigits[index]
-                                    KeypadButton(title: "\(digit)", subtitle: "") {
+                                    KeypadButton(title: "\(digit)", subtitle: keypadLetterSubtitle(for: digit)) {
                                         authVM.appendDigit(digit)
                                     }
                                 }
@@ -123,8 +123,12 @@ public struct LockScreenView: View {
                         }) {
                             ZStack {
                                 Circle()
-                                    .fill(Color(white: 0.12))
-                                    .frame(width: 72, height: 72)
+                                    .fill(Color(white: 0.14).opacity(0.85))
+                                    .frame(width: 74, height: 74)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color(white: 0.25).opacity(0.6), lineWidth: 1)
+                                    )
                                 Image(systemName: "faceid")
                                     .font(.system(size: 26, weight: .regular))
                                     .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
@@ -134,7 +138,7 @@ public struct LockScreenView: View {
                         // Digit 0 (or 10th digit)
                         if authVM.keypadDigits.count > 9 {
                             let lastDigit = authVM.keypadDigits[9]
-                            KeypadButton(title: "\(lastDigit)", subtitle: "") {
+                            KeypadButton(title: "\(lastDigit)", subtitle: keypadLetterSubtitle(for: lastDigit)) {
                                 authVM.appendDigit(lastDigit)
                             }
                         }
@@ -145,8 +149,12 @@ public struct LockScreenView: View {
                         }) {
                             ZStack {
                                 Circle()
-                                    .fill(Color(white: 0.12))
-                                    .frame(width: 72, height: 72)
+                                    .fill(Color(white: 0.14).opacity(0.85))
+                                    .frame(width: 74, height: 74)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color(white: 0.25).opacity(0.6), lineWidth: 1)
+                                    )
                                 Image(systemName: "delete.left.fill")
                                     .font(.system(size: 20, weight: .regular))
                                     .foregroundColor(.gray)
@@ -168,9 +176,24 @@ public struct LockScreenView: View {
             }
         }
     }
+    // Helper for Apple iOS Keypad Subtitles
+    private func keypadLetterSubtitle(for digit: Int) -> String {
+        switch digit {
+        case 2: return "ABC"
+        case 3: return "DEF"
+        case 4: return "GHI"
+        case 5: return "JKL"
+        case 6: return "MNO"
+        case 7: return "PQRS"
+        case 8: return "TUV"
+        case 9: return "WXYZ"
+        case 0: return "+"
+        default: return ""
+        }
+    }
 }
 
-// MARK: - Keypad Button View
+// MARK: - Keypad Button View (Authentic Apple iOS SF Pro Rounded Front Design)
 struct KeypadButton: View {
     let title: String
     let subtitle: String
@@ -180,21 +203,25 @@ struct KeypadButton: View {
         Button(action: action) {
             ZStack {
                 Circle()
-                    .fill(Color(white: 0.14))
-                    .frame(width: 72, height: 72)
+                    .fill(Color(white: 0.16).opacity(0.85))
+                    .frame(width: 74, height: 74)
                     .overlay(
                         Circle()
-                            .stroke(Color(white: 0.22), lineWidth: 1)
+                            .stroke(Color(white: 0.28).opacity(0.55), lineWidth: 1)
                     )
+                    .shadow(color: Color.black.opacity(0.35), radius: 6, x: 0, y: 3)
                 
-                VStack(spacing: 1) {
+                VStack(spacing: 0) {
                     Text(title)
-                        .font(.system(size: 28, weight: .medium, design: .rounded))
+                        .font(ZeroVaultFont.keypadDigit())
                         .foregroundColor(.white)
+                    
                     if !subtitle.isEmpty {
                         Text(subtitle)
-                            .font(.system(size: 9, weight: .semibold))
-                            .foregroundColor(.gray)
+                            .font(.system(size: 9, weight: .bold, design: .default))
+                            .foregroundColor(Color.gray.opacity(0.85))
+                            .tracking(2)
+                            .padding(.top, -1)
                     }
                 }
             }

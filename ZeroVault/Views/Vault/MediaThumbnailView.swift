@@ -20,12 +20,12 @@ public struct MediaThumbnailView: View {
         Button(action: onSelect) {
             ZStack(alignment: .bottomTrailing) {
                 // Background Tile
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(file.iconColor.opacity(0.16))
                     .aspectRatio(1.0, contentMode: .fit)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(white: 0.16), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(Color(white: 0.18), lineWidth: 1)
                     )
                 
                 // Centered Icon
@@ -35,7 +35,7 @@ public struct MediaThumbnailView: View {
                         .foregroundColor(file.iconColor)
                     
                     Text(file.title)
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .lineLimit(1)
                         .padding(.horizontal, 6)

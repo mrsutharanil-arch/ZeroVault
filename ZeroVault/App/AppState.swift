@@ -86,3 +86,47 @@ public final class AppState: ObservableObject {
             .store(in: &cancellables)
     }
 }
+
+// MARK: - Latest Apple iOS SF Pro Typography & Front Design System
+
+public enum ZeroVaultFont {
+    /// SF Pro Rounded - Brand Hero Headers & Prominent Titles
+    public static func heroTitle() -> Font {
+        .system(size: 26, weight: .heavy, design: .rounded)
+    }
+    
+    /// SF Pro Rounded - Large Storage Metric Numbers
+    public static func metricNumber() -> Font {
+        .system(size: 30, weight: .black, design: .rounded)
+    }
+    
+    /// SF Pro Rounded - PIN Keypad Digits
+    public static func keypadDigit() -> Font {
+        .system(size: 28, weight: .medium, design: .rounded)
+    }
+    
+    /// SF Pro Rounded - Action Buttons, Badges, Category Chips
+    public static func actionButton() -> Font {
+        .system(size: 15, weight: .bold, design: .rounded)
+    }
+    
+    /// SF Pro Rounded - Group Headers
+    public static func groupTitle() -> Font {
+        .system(size: 15, weight: .heavy, design: .rounded)
+    }
+    
+    /// SF Mono - Cryptographic nonces, SHA-256 tags & forensic audit indicators
+    public static func cryptoAudit() -> Font {
+        .system(size: 11, weight: .black, design: .monospaced)
+    }
+    
+    /// SF Mono - File sizes, nonces, timestamps & counters
+    public static func monoMeta() -> Font {
+        .system(size: 10, weight: .bold, design: .monospaced)
+    }
+    
+    /// SF Pro Default - Standard body text
+    public static func bodyText() -> Font {
+        .system(size: 13, weight: .regular, design: .default)
+    }
+}

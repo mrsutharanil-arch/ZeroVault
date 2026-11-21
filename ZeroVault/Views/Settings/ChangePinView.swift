@@ -46,14 +46,14 @@ public struct ChangePinView: View {
                     // Step Title
                     VStack(spacing: 6) {
                         Text(stepTitle)
-                            .font(.system(size: 20, weight: .black, design: .monospaced))
+                            .font(ZeroVaultFont.heroTitle())
                             .foregroundColor(.white)
-                            .tracking(2)
+                            .tracking(1.5)
                         
                         Text(stepSubtitle)
-                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                            .font(ZeroVaultFont.cryptoAudit())
                             .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
-                            .tracking(1)
+                            .tracking(1.5)
                     }
                     
                     // Error message
@@ -90,7 +90,7 @@ public struct ChangePinView: View {
                             HStack(spacing: 24) {
                                 ForEach(0..<3) { col in
                                     let digit = row * 3 + col + 1
-                                    KeypadButton(title: "\(digit)", subtitle: "") {
+                                    KeypadButton(title: "\(digit)", subtitle: keypadLetterSubtitle(for: digit)) {
                                         appendDigit(digit)
                                     }
                                 }
@@ -99,17 +99,21 @@ public struct ChangePinView: View {
                         
                         // Bottom row
                         HStack(spacing: 24) {
-                            Spacer().frame(width: 72, height: 72)
+                            Spacer().frame(width: 74, height: 74)
                             
-                            KeypadButton(title: "0", subtitle: "") {
+                            KeypadButton(title: "0", subtitle: keypadLetterSubtitle(for: 0)) {
                                 appendDigit(0)
                             }
                             
                             Button(action: deleteDigit) {
                                 ZStack {
                                     Circle()
-                                        .fill(Color(white: 0.14))
-                                        .frame(width: 72, height: 72)
+                                        .fill(Color(white: 0.14).opacity(0.85))
+                                        .frame(width: 74, height: 74)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color(white: 0.25).opacity(0.6), lineWidth: 1)
+                                        )
                                     Image(systemName: "delete.left.fill")
                                         .font(.system(size: 20))
                                         .foregroundColor(.gray)
@@ -167,6 +171,21 @@ public struct ChangePinView: View {
     private func deleteDigit() {
         guard !pinInput.isEmpty else { return }
         pinInput.removeLast()
+    }
+    
+    private func keypadLetterSubtitle(for digit: Int) -> String {
+        switch digit {
+        case 2: return "ABC"
+        case 3: return "DEF"
+        case 4: return "GHI"
+        case 5: return "JKL"
+        case 6: return "MNO"
+        case 7: return "PQRS"
+        case 8: return "TUV"
+        case 9: return "WXYZ"
+        case 0: return "+"
+        default: return ""
+        }
     }
     
     private func processStep() {

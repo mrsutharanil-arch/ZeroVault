@@ -125,13 +125,14 @@ public struct VaultHomeView: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("ZEROVAULT")
-                        .font(.system(size: 16, weight: .black, design: .monospaced))
+                        .font(.system(size: 16, weight: .heavy, design: .rounded))
                         .foregroundColor(.white)
-                        .tracking(2)
+                        .tracking(1.5)
                     
-                    Text("OWNER ACCESS ONLY")
-                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    Text("ALTEXH • OWNER SOVEREIGN")
+                        .font(ZeroVaultFont.cryptoAudit())
                         .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
+                        .tracking(1.5)
                 }
             }
             
@@ -187,17 +188,17 @@ public struct VaultHomeView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("SOVEREIGN ENCRYPTED STORAGE")
-                        .font(.system(size: 10, weight: .black, design: .monospaced))
+                        .font(ZeroVaultFont.cryptoAudit())
                         .foregroundColor(.gray)
                         .tracking(1)
                     
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(vaultVM.formattedStorageString)
-                            .font(.system(size: 26, weight: .heavy, design: .rounded))
+                            .font(ZeroVaultFont.metricNumber())
                             .foregroundColor(.white)
                         
                         Text("(\(vaultVM.totalFileCount) files)")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
                     }
                 }
@@ -266,9 +267,9 @@ public struct VaultHomeView: View {
                     }) {
                         HStack(spacing: 6) {
                             Image(systemName: category.iconName)
-                                .font(.system(size: 12, weight: .semibold))
+                                .font(.system(size: 12, weight: .bold))
                             Text(category.rawValue)
-                                .font(.system(size: 12, weight: .semibold))
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
                         }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
@@ -309,7 +310,7 @@ public struct VaultHomeView: View {
                     Image(systemName: "rectangle.3.group.fill")
                         .font(.system(size: 11))
                     Text("Group: \(vaultVM.groupingOption.rawValue)")
-                        .font(.system(size: 11, weight: .bold))
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
                     Image(systemName: "chevron.down")
                         .font(.system(size: 9))
                 }
@@ -389,15 +390,15 @@ public struct VaultHomeView: View {
                     // Group Header
                     HStack {
                         Text(group.title.uppercased())
-                            .font(.system(size: 11, weight: .black, design: .monospaced))
-                            .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
-                            .tracking(1)
+                            .font(ZeroVaultFont.groupTitle())
+                            .foregroundColor(.white)
+                            .tracking(0.5)
                         
                         Spacer()
                         
                         Text(group.subtitle)
-                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                            .foregroundColor(.gray)
+                            .font(ZeroVaultFont.monoMeta())
+                            .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
                     }
                     .padding(.horizontal, 16)
                     
