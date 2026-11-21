@@ -161,7 +161,7 @@ public struct SecuritySettingsView: View {
                                 }
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("Arch Technologies")
+                                    Text("Altexh")
                                         .font(.system(size: 14, weight: .bold))
                                         .foregroundColor(.white)
                                     Text("Lead Architect: Anil Suthar (@mrsutharanil-arch)")

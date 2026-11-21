@@ -1,4 +1,4 @@
-# Arch Technologies 🛡️
+# Altexh 🛡️
 ### Official Company Profile & Developer Manifesto
 
 <p align="center">
@@ -13,9 +13,9 @@
 
 ## 🏢 Company Overview
 
-**Arch Technologies** is an independent cryptographic engineering and mobile security studio founded by **Anil Suthar**. We engineer uncompromising, air-gapped security utilities for iOS, iPadOS, and macOS. 
+**Altexh** is an independent cryptographic engineering and mobile security studio founded by **Anil Suthar**. We engineer uncompromising, air-gapped security utilities for iOS, iPadOS, and macOS. 
 
-In an era of mass surveillance, aggressive cloud telemetry, and mandatory synchronization, Arch Technologies exists to defend **absolute digital sovereignty**. We build applications with zero server backdoors, zero telemetry libraries, zero automated cloud backups, and zero third-party tracking.
+In an era of mass surveillance, aggressive cloud telemetry, and mandatory synchronization, Altexh exists to defend **absolute digital sovereignty**. We build applications with zero server backdoors, zero telemetry libraries, zero automated cloud backups, and zero third-party tracking.
 
 ---
 
@@ -24,7 +24,7 @@ In an era of mass surveillance, aggressive cloud telemetry, and mandatory synchr
 * **Name**: Anil Suthar
 * **Title**: Lead iOS Systems Architect & Cryptographic Engineer
 * **GitHub**: [@mrsutharanil-arch](https://github.com/mrsutharanil-arch)
-* **Organization**: Arch Technologies
+* **Organization**: Altexh
 * **Focus Areas**: 
   - Apple CryptoKit & Secure Enclave Hardware Integration
   - Hardware Data Protection (`FileProtectionType.complete`)
@@ -39,7 +39,7 @@ In an era of mass surveillance, aggressive cloud telemetry, and mandatory synchr
 Every byte of data stored within our applications is anchored to the physical hardware device and unlocked strictly through biometric authentication (`LocalAuthentication`) and hardware-bound Master PINs. We do not provide master passwords or recovery servers—**only the physical device owner holds the cryptographic keys.**
 
 ### 2. Zero-Backup Guarantee
-By default, mobile operating systems automatically package application directories into iCloud or unencrypted desktop backups. Arch Technologies enforces `NSURLIsExcludedFromBackupKey = true` across all storage trees, preventing files from ever entering transit to third-party servers.
+By default, mobile operating systems automatically package application directories into iCloud or unencrypted desktop backups. Altexh enforces `NSURLIsExcludedFromBackupKey = true` across all storage trees, preventing files from ever entering transit to third-party servers.
 
 ### 3. File Manager & Photo Isolation
 Confidential documents and photos should never surface in public file explorers or camera roll albums. We implement strict sandbox containment (`UIFileSharingEnabled = false` and `LSSupportsOpeningDocumentsInPlace = false`) and direct sensor-to-RAM capture pipelines that bypass system photo libraries entirely.
@@ -66,4 +66,4 @@ Decrypted cleartext is volatile and exists strictly in memory buffers while acti
 * **Location**: Sovereign Developer Ecosystem
 
 ---
-*© 2026 Arch Technologies & Anil Suthar. All rights reserved.*
+*© 2026 Altexh & Anil Suthar. All rights reserved.*

@@ -38,7 +38,7 @@ public struct DeveloperProfileView: View {
                             }
                             
                             VStack(spacing: 4) {
-                                Text("Arch Technologies")
+                                Text("Altexh")
                                     .font(.system(size: 22, weight: .heavy))
                                     .foregroundColor(.white)
                                 
@@ -148,7 +148,7 @@ public struct DeveloperProfileView: View {
                             .padding(.horizontal, 16)
                         }
                         
-                        Text("© 2026 Arch Technologies & Anil Suthar. All rights reserved.")
+                        Text("© 2026 Altexh & Anil Suthar. All rights reserved.")
                             .font(.system(size: 10, design: .monospaced))
                             .foregroundColor(.gray.opacity(0.6))
                             .padding(.bottom, 24)

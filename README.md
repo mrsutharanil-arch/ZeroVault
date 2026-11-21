@@ -168,9 +168,9 @@ ZeroVault includes a **full interactive web simulator** so you can test the owne
 
 ## 🏢 Company & Developer Profile
 
-* **Company**: **Arch Technologies**
+* **Company**: **Altexh**
 * **Lead Architect & Developer**: **Anil Suthar**
 * **GitHub Profile**: [@mrsutharanil-arch](https://github.com/mrsutharanil-arch)
 * **Company Manifesto**: Read the full [COMPANY_PROFILE.md](file:///F:/ios/ZeroVault/COMPANY_PROFILE.md)
 * **Design & Branding**: Vector assets & high-resolution Canva-compatible logo specifications included.
-* **License**: Sovereign Open Security Architecture. All rights reserved © 2026 Arch Technologies.
+* **License**: Sovereign Open Security Architecture. All rights reserved © 2026 Altexh.
