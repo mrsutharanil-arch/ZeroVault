@@ -14,10 +14,26 @@ import SwiftUI
 import CryptoKit
 import UniformTypeIdentifiers
 
+public enum ViewLayoutMode: String, CaseIterable, Identifiable {
+    case grid = "Grid"
+    case list = "List"
+    public var id: String { rawValue }
+}
+
+public enum GroupingOption: String, CaseIterable, Identifiable {
+    case date = "Date"
+    case type = "Type"
+    case none = "None"
+    public var id: String { rawValue }
+}
+
 public final class VaultViewModel: ObservableObject {
     @Published public var files: [VaultFile] = []
     @Published public var selectedCategory: VaultCategory = .all
     @Published public var searchQuery: String = ""
+    @Published public var layoutMode: ViewLayoutMode = .grid
+    @Published public var groupingOption: GroupingOption = .date
+    
     @Published public var isImportingDocument: Bool = false
     @Published public var isImportingPhoto: Bool = false
     @Published public var isShowingCamera: Bool = false
@@ -25,6 +41,11 @@ public final class VaultViewModel: ObservableObject {
     @Published public var isShowingAuditSheet: Bool = false
     @Published public var isShowingSettings: Bool = false
     @Published public var activeViewerFile: VaultFile? = nil
+    
+    // Media gallery swiper
+    @Published public var isPresentingGallery: Bool = false
+    @Published public var activeGalleryFiles: [VaultFile] = []
+    @Published public var activeGalleryIndex: Int = 0
     
     @Published public var totalStorageBytes: Int64 = 0
     @Published public var totalFileCount: Int = 0
@@ -53,11 +74,85 @@ public final class VaultViewModel: ObservableObject {
         .sorted { $0.createdAt > $1.createdAt }
     }
     
-    public var formattedStorageString: String {
-        let formatter = ByteCountFormatter()
-        formatter.allowedUnits = [.useBytes, .useKB, .useMB, .useGB]
-        formatter.countStyle = .file
-        return formatter.string(fromByteCount: totalStorageBytes)
+    // MARK: - Grouped Media & Files for Fast Scrolling
+    
+    public var groupedFiles: [VaultMediaGroup] {
+        let items = filteredFiles
+        guard !items.isEmpty else { return [] }
+        
+        switch groupingOption {
+        case .none:
+            let totalBytes = items.reduce(0) { $0 + $1.fileSize }
+            let sizeStr = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
+            return [VaultMediaGroup(id: "all", title: "All Encrypted Files", subtitle: "\(items.count) items • \(sizeStr)", files: items)]
+            
+        case .type:
+            var dict: [String: [VaultFile]] = [:]
+            var order: [String] = []
+            for file in items {
+                let catName = file.category.rawValue
+                if dict[catName] == nil {
+                    dict[catName] = []
+                    order.append(catName)
+                }
+                dict[catName]?.append(file)
+            }
+            return order.map { key in
+                let groupFiles = dict[key] ?? []
+                let totalBytes = groupFiles.reduce(0) { $0 + $1.fileSize }
+                let sizeStr = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
+                return VaultMediaGroup(id: key, title: key, subtitle: "\(groupFiles.count) items • \(sizeStr)", files: groupFiles)
+            }
+            
+        case .date:
+            let calendar = Calendar.current
+            var dict: [String: [VaultFile]] = [:]
+            var order: [String] = []
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM yyyy"
+            
+            for file in items {
+                let sectionTitle: String
+                if calendar.isDateInToday(file.createdAt) {
+                    sectionTitle = "Today"
+                } else if calendar.isDateInYesterday(file.createdAt) {
+                    sectionTitle = "Yesterday"
+                } else if let daysAgo = calendar.dateComponents([.day], from: file.createdAt, to: Date()).day, daysAgo < 7 {
+                    sectionTitle = "This Week"
+                } else {
+                    sectionTitle = dateFormatter.string(from: file.createdAt)
+                }
+                
+                if dict[sectionTitle] == nil {
+                    dict[sectionTitle] = []
+                    order.append(sectionTitle)
+                }
+                dict[sectionTitle]?.append(file)
+            }
+            
+            return order.map { key in
+                let groupFiles = dict[key] ?? []
+                let totalBytes = groupFiles.reduce(0) { $0 + $1.fileSize }
+                let sizeStr = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
+                return VaultMediaGroup(id: key, title: key, subtitle: "\(groupFiles.count) items • \(sizeStr)", files: groupFiles)
+            }
+        }
+    }
+    
+    // MARK: - Open Media Carousel or Single Viewer
+    
+    public func openFileViewer(_ file: VaultFile) {
+        if file.isPhoto || file.isVideo {
+            let mediaOnly = filteredFiles.filter { $0.isPhoto || $0.isVideo }
+            if let idx = mediaOnly.firstIndex(where: { $0.id == file.id }) {
+                self.activeGalleryFiles = mediaOnly
+                self.activeGalleryIndex = idx
+                self.isPresentingGallery = true
+                return
+            }
+        }
+        self.activeViewerFile = file
     }
     
     // MARK: - Load Encrypted Vault Files

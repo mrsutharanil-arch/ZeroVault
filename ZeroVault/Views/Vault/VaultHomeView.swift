@@ -4,7 +4,8 @@
 //
 //  Main sovereign vault dashboard. Exclusively accessible by the owner.
 //  Provides high-speed encrypted file listing, category filters,
-//  security audit verification, and direct import triggers.
+//  fast scrolling timeline scrubber, 3-column grid & list layout switching,
+//  date/type grouping, and media gallery swiper.
 //
 
 import SwiftUI
@@ -33,40 +34,43 @@ public struct VaultHomeView: View {
                     // Top Custom Navigation Bar
                     headerBar
                     
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            // Security Storage Metric Card
-                            securityMetricCard
-                            
-                            // Category Filter Chips
-                            categoryScrollView
-                            
-                            // Search Bar
-                            searchBar
-                            
-                            // File List or Empty State
-                            if vaultVM.filteredFiles.isEmpty {
-                                emptyVaultView
-                            } else {
-                                LazyVStack(spacing: 10) {
-                                    ForEach(vaultVM.filteredFiles) { file in
-                                        VaultFileRow(
-                                            file: file,
-                                            onSelect: {
-                                                vaultVM.activeViewerFile = file
-                                            },
-                                            onDelete: {
-                                                fileToShred = file
-                                                showingShredConfirm = true
-                                            }
-                                        )
+                    ScrollViewReader { scrollProxy in
+                        ZStack(alignment: .trailing) {
+                            ScrollView {
+                                VStack(spacing: 14) {
+                                    // Security Storage Metric Card
+                                    securityMetricCard
+                                    
+                                    // Category Filter Chips
+                                    categoryScrollView
+                                    
+                                    // View Options Bar (Grid/List & Grouping selector)
+                                    viewOptionsBar
+                                    
+                                    // Search Bar
+                                    searchBar
+                                    
+                                    // File List or Empty State
+                                    if vaultVM.filteredFiles.isEmpty {
+                                        emptyVaultView
+                                    } else {
+                                        groupedMediaContentView
                                     }
                                 }
-                                .padding(.horizontal, 16)
+                                .padding(.vertical, 14)
+                                .padding(.bottom, 90) // Bottom bar spacing
+                            }
+                            
+                            // Fast Scroll Scrubber (Timeline scrubber on right)
+                            if vaultVM.groupingOption != .none && vaultVM.groupedFiles.count > 1 {
+                                FastScrollScrubber(groups: vaultVM.groupedFiles) { targetId in
+                                    withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
+                                        scrollProxy.scrollTo(targetId, anchor: .top)
+                                    }
+                                }
+                                .padding(.trailing, 4)
                             }
                         }
-                        .padding(.vertical, 16)
-                        .padding(.bottom, 80) // Bottom bar spacing
                     }
                 }
                 
@@ -88,6 +92,9 @@ public struct VaultHomeView: View {
             }
             .fullScreenCover(item: $vaultVM.activeViewerFile) { file in
                 SecureFileViewerContainer(file: file)
+            }
+            .fullScreenCover(isPresented: $vaultVM.isPresentingGallery) {
+                SecureMediaGalleryView(vaultVM: vaultVM)
             }
             .fullScreenCover(isPresented: $vaultVM.isShowingCamera) {
                 SecureCameraView(vaultVM: vaultVM)
@@ -279,6 +286,73 @@ public struct VaultHomeView: View {
         }
     }
     
+    // MARK: - View Options Bar (Grid/List & Grouping)
+    
+    private var viewOptionsBar: some View {
+        HStack(spacing: 10) {
+            // Grouping Selector Menu
+            Menu {
+                ForEach(GroupingOption.allCases) { opt in
+                    Button(action: {
+                        vaultVM.groupingOption = opt
+                    }) {
+                        HStack {
+                            Text("Group by \(opt.rawValue)")
+                            if vaultVM.groupingOption == opt {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: "rectangle.3.group.fill")
+                        .font(.system(size: 11))
+                    Text("Group: \(vaultVM.groupingOption.rawValue)")
+                        .font(.system(size: 11, weight: .bold))
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 9))
+                }
+                .foregroundColor(Color(white: 0.85))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color(white: 0.12))
+                .cornerRadius(8)
+            }
+            
+            Spacer()
+            
+            // View Mode Toggle (Grid vs List)
+            HStack(spacing: 2) {
+                Button(action: {
+                    vaultVM.layoutMode = .grid
+                }) {
+                    Image(systemName: "square.grid.3x3.fill")
+                        .font(.system(size: 13))
+                        .foregroundColor(vaultVM.layoutMode == .grid ? Color(red: 0.2, green: 0.8, blue: 0.6) : .gray)
+                        .padding(6)
+                        .background(vaultVM.layoutMode == .grid ? Color(red: 0.2, green: 0.8, blue: 0.6).opacity(0.18) : Color.clear)
+                        .cornerRadius(6)
+                }
+                
+                Button(action: {
+                    vaultVM.layoutMode = .list
+                }) {
+                    Image(systemName: "list.bullet")
+                        .font(.system(size: 13))
+                        .foregroundColor(vaultVM.layoutMode == .list ? Color(red: 0.2, green: 0.8, blue: 0.6) : .gray)
+                        .padding(6)
+                        .background(vaultVM.layoutMode == .list ? Color(red: 0.2, green: 0.8, blue: 0.6).opacity(0.18) : Color.clear)
+                        .cornerRadius(6)
+                }
+            }
+            .padding(2)
+            .background(Color(white: 0.1))
+            .cornerRadius(8)
+        }
+        .padding(.horizontal, 16)
+    }
+    
     // MARK: - Search Bar
     
     private var searchBar: some View {
@@ -304,6 +378,61 @@ public struct VaultHomeView: View {
         .background(Color(white: 0.08))
         .cornerRadius(12)
         .padding(.horizontal, 16)
+    }
+    
+    // MARK: - Grouped Media Content View
+    
+    private var groupedMediaContentView: some View {
+        LazyVStack(spacing: 18) {
+            ForEach(vaultVM.groupedFiles) { group in
+                VStack(alignment: .leading, spacing: 8) {
+                    // Group Header
+                    HStack {
+                        Text(group.title.uppercased())
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
+                            .tracking(1)
+                        
+                        Spacer()
+                        
+                        Text(group.subtitle)
+                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    if vaultVM.layoutMode == .grid {
+                        // 3-Column Square Grid
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                            ForEach(group.files) { file in
+                                MediaThumbnailView(file: file) {
+                                    vaultVM.openFileViewer(file)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                    } else {
+                        // Full Detailed List
+                        LazyVStack(spacing: 8) {
+                            ForEach(group.files) { file in
+                                VaultFileRow(
+                                    file: file,
+                                    onSelect: {
+                                        vaultVM.openFileViewer(file)
+                                    },
+                                    onDelete: {
+                                        fileToShred = file
+                                        showingShredConfirm = true
+                                    }
+                                )
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                }
+                .id(group.id)
+            }
+        }
     }
     
     // MARK: - Empty State View

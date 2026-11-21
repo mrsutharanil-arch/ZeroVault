@@ -35,6 +35,11 @@
 		B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001A2900000100000001 /* SecurePDFViewer.swift */; };
 		B010001B2900000100000001 /* SecureTextViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001B2900000100000001 /* SecureTextViewer.swift */; };
 		B010001D2900000100000001 /* DeveloperProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001D2900000100000001 /* DeveloperProfileView.swift */; };
+		B010001E2900000100000001 /* VaultMediaGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001E2900000100000001 /* VaultMediaGroup.swift */; };
+		B010001F2900000100000001 /* ChangePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F010001F2900000100000001 /* ChangePinView.swift */; };
+		B01000202900000100000001 /* MediaThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000202900000100000001 /* MediaThumbnailView.swift */; };
+		B01000212900000100000001 /* FastScrollScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000212900000100000001 /* FastScrollScrubber.swift */; };
+		B01000222900000100000001 /* SecureMediaGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01000222900000100000001 /* SecureMediaGalleryView.swift */; };
 		B010001C2900000100000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F010001C2900000100000001 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +74,11 @@
 		F010001A2900000100000001 /* SecurePDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurePDFViewer.swift; sourceTree = "<group>"; };
 		F010001B2900000100000001 /* SecureTextViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureTextViewer.swift; sourceTree = "<group>"; };
 		F010001D2900000100000001 /* DeveloperProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperProfileView.swift; sourceTree = "<group>"; };
+		F010001E2900000100000001 /* VaultMediaGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultMediaGroup.swift; sourceTree = "<group>"; };
+		F010001F2900000100000001 /* ChangePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePinView.swift; sourceTree = "<group>"; };
+		F01000202900000100000001 /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
+		F01000212900000100000001 /* FastScrollScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastScrollScrubber.swift; sourceTree = "<group>"; };
+		F01000222900000100000001 /* SecureMediaGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureMediaGalleryView.swift; sourceTree = "<group>"; };
 		F010001C2900000100000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +139,7 @@
 				F01000042900000100000001 /* VaultCategory.swift */,
 				F01000052900000100000001 /* VaultFile.swift */,
 				F01000062900000100000001 /* VaultSecuritySettings.swift */,
+				F010001E2900000100000001 /* VaultMediaGroup.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,6 +194,8 @@
 				F01000152900000100000001 /* StorageSecurityAuditSheet.swift */,
 				F01000162900000100000001 /* VaultFileRow.swift */,
 				F01000172900000100000001 /* VaultHomeView.swift */,
+				F01000202900000100000001 /* MediaThumbnailView.swift */,
+				F01000212900000100000001 /* FastScrollScrubber.swift */,
 			);
 			path = Vault;
 			sourceTree = "<group>";
@@ -202,6 +215,7 @@
 				F01000192900000100000001 /* SecureImageViewer.swift */,
 				F010001A2900000100000001 /* SecurePDFViewer.swift */,
 				F010001B2900000100000001 /* SecureTextViewer.swift */,
+				F01000222900000100000001 /* SecureMediaGalleryView.swift */,
 			);
 			path = Viewer;
 			sourceTree = "<group>";
@@ -220,6 +234,7 @@
 			children = (
 				F01000132900000100000001 /* SecuritySettingsView.swift */,
 				F010001D2900000100000001 /* DeveloperProfileView.swift */,
+				F010001F2900000100000001 /* ChangePinView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -328,6 +343,11 @@
 				B010001A2900000100000001 /* SecurePDFViewer.swift in Sources */,
 				B010001B2900000100000001 /* SecureTextViewer.swift in Sources */,
 				B010001D2900000100000001 /* DeveloperProfileView.swift in Sources */,
+				B010001E2900000100000001 /* VaultMediaGroup.swift in Sources */,
+				B010001F2900000100000001 /* ChangePinView.swift in Sources */,
+				B01000202900000100000001 /* MediaThumbnailView.swift in Sources */,
+				B01000212900000100000001 /* FastScrollScrubber.swift in Sources */,
+				B01000222900000100000001 /* SecureMediaGalleryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

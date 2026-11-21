@@ -163,7 +163,7 @@ public final class AuthenticationService: ObservableObject {
         lockoutEndTime = nil
     }
     
-    // MARK: - Initial Setup
+    // MARK: - Initial Setup & Change PIN
     
     public func setupOwnerPin(_ pin: String) throws {
         let salt = CryptographyService.shared.generateRandomSalt(count: 32)
@@ -175,6 +175,24 @@ public final class AuthenticationService: ObservableObject {
             let masterKey = CryptographyService.shared.generateMasterKey()
             try keychain.saveMasterKey(masterKey)
         }
+    }
+    
+    public func changeOwnerPin(currentPin: String, newPin: String) throws -> Bool {
+        guard let storedHash = keychain.retrievePinHash(),
+              let salt = keychain.retrievePinSalt() else {
+            return false
+        }
+        
+        let candidateHash = hashPin(currentPin, salt: salt)
+        guard candidateHash == storedHash else {
+            return false // Old PIN incorrect
+        }
+        
+        // Generate fresh salt and new hash
+        let newSalt = CryptographyService.shared.generateRandomSalt(count: 32)
+        let newHash = hashPin(newPin, salt: newSalt)
+        try keychain.savePinHash(newHash, salt: newSalt)
+        return true
     }
     
     public func setupDecoyPin(_ pin: String) throws {

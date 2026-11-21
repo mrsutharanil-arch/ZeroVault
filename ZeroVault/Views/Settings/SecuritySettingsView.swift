@@ -67,6 +67,19 @@ public struct SecuritySettingsView: View {
                                 }
                             }
                         }
+                        
+                        Button(action: { showingChangePin = true }) {
+                            HStack {
+                                Image(systemName: "key.fill")
+                                    .foregroundColor(Color(red: 0.2, green: 0.8, blue: 0.6))
+                                Text("Change Master Owner PIN")
+                                    .foregroundColor(.white)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.gray)
+                            }
+                        }
                     }
                     .listRowBackground(Color(white: 0.09))
                     
@@ -205,6 +218,9 @@ public struct SecuritySettingsView: View {
             }
             .sheet(isPresented: $showingDeveloperProfile) {
                 DeveloperProfileView()
+            }
+            .sheet(isPresented: $showingChangePin) {
+                ChangePinView()
             }
             .sheet(isPresented: $showingDecoySetup) {
                 NavigationStack {

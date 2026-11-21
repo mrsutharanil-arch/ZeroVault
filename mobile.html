@@ -53,8 +53,8 @@
       justify-content: center;
       margin-bottom: 16px;
       box-shadow: 0 0 25px rgba(0, 229, 153, 0.25);
+      overflow: hidden;
     }
-    .vault-emblem svg { width: 34px; height: 34px; fill: var(--emerald); }
     .vault-title { font-family: var(--mono); font-size: 22px; font-weight: 800; letter-spacing: 3px; }
     .vault-sub { font-family: var(--mono); font-size: 10px; color: var(--emerald); letter-spacing: 2px; margin-bottom: 24px; }
     
@@ -75,26 +75,57 @@
     .main-view.active { display: flex; }
     .lock-container.hidden { display: none; }
 
-    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 16px 0; }
-    .nav-title { font-family: var(--mono); font-size: 17px; font-weight: 800; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 14px 0; }
+    .nav-title { font-family: var(--mono); font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .nav-title img { width: 24px; height: 24px; border-radius: 6px; }
+    
     .stat-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 12px;
     }
-    .stat-size { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
-    .stat-meta { font-size: 11px; color: var(--emerald); font-family: var(--mono); }
+    .stat-size { font-size: 24px; font-weight: 800; margin-bottom: 2px; }
+    .stat-meta { font-size: 10px; color: var(--emerald); font-family: var(--mono); }
 
-    .chips-row { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px; }
+    .chips-row { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
     .chip { padding: 6px 14px; border-radius: 20px; background: #131924; border: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
     .chip.active { background: rgba(0,229,153,0.15); border-color: var(--emerald); color: var(--emerald); }
 
+    /* VIEW OPTIONS (GRID VS LIST & GROUPING) */
+    .view-controls {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    }
+    .mode-btn {
+      padding: 4px 10px; border-radius: 6px; background: #131924; border: 1px solid var(--border); color: var(--muted); font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+    .mode-btn.active { background: rgba(0,229,153,0.2); color: var(--emerald); border-color: var(--emerald); }
+
+    .group-header {
+      font-family: var(--mono); font-size: 10px; font-weight: 800; color: var(--emerald); letter-spacing: 1px;
+      display: flex; justify-content: space-between; margin: 12px 0 6px 0;
+    }
+
+    /* GRID LAYOUT (3-COL) */
+    .media-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;
+    }
+    .grid-card {
+      aspect-ratio: 1; border-radius: 10px; background: #0f1520; border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer;
+    }
+    .grid-card .icon { font-size: 24px; margin-bottom: 4px; }
+    .grid-card .label { font-size: 9px; font-weight: 600; color: #fff; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center; }
+    .grid-card .badge {
+      position: absolute; bottom: 3px; right: 3px; font-size: 7px; font-family: var(--mono); font-weight: 800; background: rgba(0,0,0,0.75); color: #fff; padding: 2px 4px; border-radius: 3px;
+    }
+
+    /* LIST LAYOUT */
     .file-card {
       display: flex; align-items: center; gap: 12px; background: #0f1520; border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px; margin-bottom: 10px; cursor: pointer;
+      border-radius: 14px; padding: 12px; margin-bottom: 8px; cursor: pointer;
     }
-    .file-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .file-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .file-info { flex: 1; min-width: 0; }
-    .file-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .file-meta-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+    .file-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-meta-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
 
     .bottom-dock {
       position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #06090e 85%, transparent);
@@ -109,12 +140,12 @@
 
     /* MODAL */
     .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; display: none;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 200; display: none;
       flex-direction: column; padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
     }
     .modal.open { display: flex; }
-    .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
-    .modal-body { flex: 1; overflow-y: auto; background: #111722; border-radius: 12px; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+    .modal-body { flex: 1; overflow-y: auto; background: #111722; border-radius: 12px; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -135,59 +166,99 @@
     <div class="keypad" id="keypad"></div>
 
     <div style="font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:1px; margin-top:10px;">
-      AES-256-GCM • ZERO BACKUP • RAM ONLY
+      MASTER PIN: <span id="hintMasterPin" style="color:var(--emerald);">123456</span> • TAP 👤 FOR FACE ID
     </div>
   </div>
 
   <!-- MAIN VAULT VIEW -->
   <div id="mainView" class="main-view">
     <div class="nav-bar">
-      <div class="nav-title">ZEROVAULT</div>
-      <button onclick="lockVault()" style="background:rgba(255,59,92,0.15); border:1px solid rgba(255,59,92,0.3); color:var(--red); padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700;">🔒 Lock</button>
+      <div class="nav-title"><img src="logo.png" alt="Logo"/> ZEROVAULT</div>
+      <div style="display:flex; gap:6px;">
+        <button onclick="openChangePinModal()" style="background:#131924; border:1px solid var(--border); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px;">🔑 PIN</button>
+        <button onclick="lockVault()" style="background:rgba(255,59,92,0.15); border:1px solid rgba(255,59,92,0.3); color:var(--red); padding:6px 10px; border-radius:8px; font-size:12px; font-weight:700;">🔒 Lock</button>
+      </div>
     </div>
 
     <div class="stat-card">
       <div style="font-family:var(--mono); font-size:9px; color:var(--muted); letter-spacing:1px; margin-bottom:4px;">SOVEREIGN STORAGE (EXCLUDED FROM BACKUP)</div>
       <div class="stat-size" id="statSize">34.8 MB</div>
-      <div class="stat-meta">4 ENCRYPTED ITEMS • NO FILE SHARING</div>
+      <div class="stat-meta">5 ENCRYPTED ITEMS • AIR-GAPPED</div>
     </div>
 
     <div class="chips-row">
       <div class="chip active" onclick="filterCat('all', this)">All Files</div>
-      <div class="chip" onclick="filterCat('docs', this)">Documents</div>
       <div class="chip" onclick="filterCat('photos', this)">Photos</div>
+      <div class="chip" onclick="filterCat('videos', this)">Videos</div>
+      <div class="chip" onclick="filterCat('docs', this)">Documents</div>
       <div class="chip" onclick="filterCat('notes', this)">Notes</div>
+    </div>
+
+    <!-- VIEW CONTROLS -->
+    <div class="view-controls">
+      <div style="display:flex; gap:4px;">
+        <span class="mode-btn active" onclick="setGrouping('date', this)">By Date</span>
+        <span class="mode-btn" onclick="setGrouping('type', this)">By Type</span>
+      </div>
+      <div style="display:flex; gap:4px;">
+        <span id="btnGrid" class="mode-btn active" onclick="setLayout('grid')">⊞ Grid</span>
+        <span id="btnList" class="mode-btn" onclick="setLayout('list')">☰ List</span>
+      </div>
     </div>
 
     <div id="fileContainer"></div>
 
     <div class="bottom-dock">
-      <button class="dock-btn cam" onclick="simulateCamCapture()">📷 Secure Cam</button>
+      <button class="dock-btn cam" onclick="captureSecurePhoto()">📷 Secure Cam</button>
       <button class="dock-btn add" onclick="triggerFileAdd()">➕ Add File</button>
     </div>
   </div>
 
-  <!-- VIEWER MODAL -->
+  <!-- VIEWER / GALLERY SWIPER MODAL -->
   <div id="viewerModal" class="modal">
     <div class="modal-head">
-      <h3 id="modalTitle" style="font-size:15px; font-weight:700;">File Preview</h3>
-      <button onclick="closeModal()" style="background:none; border:none; color:var(--emerald); font-weight:700; font-size:14px;">Close & Wipe</button>
+      <h3 id="modalTitle" style="font-size:14px; font-weight:700;">File Preview</h3>
+      <button onclick="closeModal()" style="background:none; border:none; color:var(--emerald); font-weight:700; font-size:13px;">Close & Wipe</button>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-body" id="modalBody" style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0;">
+      <button onclick="prevGallery()" style="background:#131924; border:1px solid var(--border); color:#fff; padding:8px 16px; border-radius:8px;">◀ Prev</button>
+      <span id="galleryCounter" style="font-family:var(--mono); font-size:11px; color:var(--emerald);">1 of 5</span>
+      <button onclick="nextGallery()" style="background:#131924; border:1px solid var(--border); color:#fff; padding:8px 16px; border-radius:8px;">Next ▶</button>
+    </div>
+  </div>
+
+  <!-- PIN CHANGE MODAL -->
+  <div id="pinModal" class="modal">
+    <div class="modal-head">
+      <h3 style="font-size:15px; font-weight:700;">Change Master PIN</h3>
+      <button onclick="closePinModal()" style="background:none; border:none; color:#888; font-size:13px;">Cancel</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px; padding-top:10px;">
+      <input type="password" id="oldPin" maxlength="6" placeholder="Current 6-digit PIN" style="padding:12px; background:#141a24; border:1px solid var(--border); color:#fff; border-radius:8px; text-align:center; font-size:18px; font-family:var(--mono);">
+      <input type="password" id="newPin" maxlength="6" placeholder="New 6-digit PIN" style="padding:12px; background:#141a24; border:1px solid var(--border); color:#fff; border-radius:8px; text-align:center; font-size:18px; font-family:var(--mono);">
+      <input type="password" id="confirmPin" maxlength="6" placeholder="Confirm New PIN" style="padding:12px; background:#141a24; border:1px solid var(--border); color:#fff; border-radius:8px; text-align:center; font-size:18px; font-family:var(--mono);">
+      <button onclick="saveNewPin()" style="background:var(--emerald); color:#000; font-weight:800; padding:14px; border-radius:10px; border:none; margin-top:8px;">Update Master PIN</button>
+    </div>
   </div>
 
   <input type="file" id="filePicker" style="display:none;" onchange="handleFile(event)">
 
   <script>
-    const MASTER_PIN = "123456";
+    let MASTER_PIN = "123456";
     let pin = "";
-    let files = [
-      { id: 1, title: "Confidential Contract 2026", cat: "docs", size: "2.4 MB", icon: "📄", color: "rgba(255,170,0,0.15)", text: "SOVEREIGN AGREEMENT\n\nOwner-Only File.\nNo backup. AES-256 encrypted." },
-      { id: 2, title: "Direct Secure Photo #1042", cat: "photos", size: "4.8 MB", icon: "📷", color: "rgba(0,229,153,0.15)", text: "DIRECT TO RAM PHOTO\n\nCamera roll bypassed completely." },
-      { id: 3, title: "Recovery Key (Cold Storage)", cat: "notes", size: "1.4 KB", icon: "📝", color: "rgba(181,108,255,0.15)", text: "SEED PHRASE:\nshield fortress sovereign cipher enclave memory granite orbit vault stealth" },
-      { id: 4, title: "Swiss Bank Wire Receipt", cat: "docs", size: "1.8 MB", icon: "📄", color: "rgba(255,170,0,0.15)", text: "WIRE TRANSFER CONFIRMATION\n\nAmount: $250,000.00\nCleared via Private Sovereign Enclave." }
-    ];
+    let layoutMode = "grid";
+    let groupingMode = "date";
+    let activeGalleryIdx = 0;
     let selectedCat = 'all';
+
+    let files = [
+      { id: 1, title: "Photo ID Scan", cat: "photos", group: "Today", size: "3.2 MB", icon: "📷", color: "rgba(0,229,153,0.15)", isVideo: false },
+      { id: 2, title: "Security 4K Video", cat: "videos", group: "Today", size: "14.8 MB", icon: "🎬", color: "rgba(255,59,92,0.15)", isVideo: true },
+      { id: 3, title: "Swiss Bank Wire", cat: "docs", group: "Yesterday", size: "1.8 MB", icon: "📄", color: "rgba(255,170,0,0.15)", isVideo: false },
+      { id: 4, title: "Seed Phrase Backup", cat: "notes", group: "November 2026", size: "1.4 KB", icon: "📝", color: "rgba(181,108,255,0.15)", isVideo: false },
+      { id: 5, title: "Lab Screenshot", cat: "photos", group: "November 2026", size: "4.1 MB", icon: "📷", color: "rgba(0,229,153,0.15)", isVideo: false }
+    ];
 
     function renderKeypad() {
       const kp = document.getElementById('keypad');
@@ -226,29 +297,17 @@
         if(pin.length === 6) setTimeout(checkPin, 150);
       }
     }
-    function deleteDigit() {
-      pin = pin.slice(0, -1);
-      updateDots();
-    }
+    function deleteDigit() { pin = pin.slice(0, -1); updateDots(); }
     function updateDots() {
-      const dots = document.querySelectorAll('.dot');
-      dots.forEach((d, i) => d.classList.toggle('filled', i < pin.length));
+      document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('filled', i < pin.length));
     }
     function checkPin() {
-      if(pin === MASTER_PIN || pin === "000000") {
-        unlockVault();
-      } else {
-        pin = "";
-        updateDots();
-        renderKeypad();
-      }
+      if(pin === MASTER_PIN || pin === "000000") unlockVault();
+      else { pin = ""; updateDots(); renderKeypad(); }
     }
-    function triggerFaceID() {
-      unlockVault();
-    }
+    function triggerFaceID() { unlockVault(); }
     function unlockVault() {
-      pin = "";
-      updateDots();
+      pin = ""; updateDots();
       document.getElementById('lockView').classList.add('hidden');
       document.getElementById('mainView').classList.add('active');
       renderFiles();
@@ -259,6 +318,18 @@
       renderKeypad();
     }
 
+    function setLayout(mode) {
+      layoutMode = mode;
+      document.getElementById('btnGrid').classList.toggle('active', mode === 'grid');
+      document.getElementById('btnList').classList.toggle('active', mode === 'list');
+      renderFiles();
+    }
+    function setGrouping(g, el) {
+      groupingMode = g;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      renderFiles();
+    }
     function filterCat(cat, el) {
       selectedCat = cat;
       document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -270,68 +341,124 @@
       const c = document.getElementById('fileContainer');
       c.innerHTML = "";
       const filtered = files.filter(f => selectedCat === 'all' || f.cat === selectedCat);
+
+      let groups = {};
       filtered.forEach(f => {
-        const item = document.createElement('div');
-        item.className = 'file-card';
-        item.onclick = () => openFile(f);
-        item.innerHTML = `
-          <div class="file-icon" style="background:${f.color}">${f.icon}</div>
-          <div class="file-info">
-            <div class="file-title">${f.title}</div>
-            <div class="file-meta-sub">🔒 ${f.size} • AES-256-GCM</div>
-          </div>
-          <div onclick="shred(event, ${f.id})" style="color:var(--muted); padding:8px;">🗑️</div>
-        `;
-        c.appendChild(item);
+        const k = groupingMode === 'date' ? f.group : f.cat.toUpperCase();
+        if(!groups[k]) groups[k] = [];
+        groups[k].push(f);
+      });
+
+      Object.keys(groups).forEach(k => {
+        const h = document.createElement('div');
+        h.className = 'group-header';
+        h.innerHTML = `<span>${k}</span><span>${groups[k].length} ITEMS</span>`;
+        c.appendChild(h);
+
+        if(layoutMode === 'grid') {
+          const grid = document.createElement('div');
+          grid.className = 'media-grid';
+          groups[k].forEach(f => {
+            const tile = document.createElement('div');
+            tile.className = 'grid-card';
+            tile.onclick = () => openGallery(f);
+            tile.innerHTML = `
+              <div class="icon">${f.icon}</div>
+              <div class="label">${f.title}</div>
+              <div class="badge">${f.isVideo ? '▶ VIDEO' : f.size}</div>
+            `;
+            grid.appendChild(tile);
+          });
+          c.appendChild(grid);
+        } else {
+          groups[k].forEach(f => {
+            const row = document.createElement('div');
+            row.className = 'file-card';
+            row.onclick = () => openGallery(f);
+            row.innerHTML = `
+              <div class="file-icon" style="background:${f.color}">${f.icon}</div>
+              <div class="file-info">
+                <div class="file-title">${f.title}</div>
+                <div class="file-meta-sub">🔒 ${f.size} • AES-256-GCM</div>
+              </div>
+            `;
+            c.appendChild(row);
+          });
+        }
       });
     }
 
-    function shred(e, id) {
-      e.stopPropagation();
-      if(confirm("Shred this encrypted file?")) {
-        files = files.filter(f => f.id !== id);
-        renderFiles();
-      }
-    }
-
-    function openFile(f) {
-      document.getElementById('modalTitle').textContent = f.title;
-      document.getElementById('modalBody').textContent = f.text + "\n\n⚡ DECRYPTED IN RAM • ZERO DISK RESIDUE";
+    function openGallery(f) {
+      const media = files.filter(x => x.cat === 'photos' || x.cat === 'videos');
+      activeGalleryIdx = media.findIndex(x => x.id === f.id);
+      if(activeGalleryIdx === -1) activeGalleryIdx = 0;
+      updateGalleryView();
       document.getElementById('viewerModal').classList.add('open');
     }
+    function updateGalleryView() {
+      const media = files.filter(x => x.cat === 'photos' || x.cat === 'videos');
+      if(media.length === 0) { closeModal(); return; }
+      const f = media[activeGalleryIdx];
+      document.getElementById('modalTitle').textContent = f.title;
+      document.getElementById('galleryCounter').textContent = `${activeGalleryIdx + 1} of ${media.length}`;
+      document.getElementById('modalBody').innerHTML = `
+        <div style="font-size:54px; margin-bottom:12px;">${f.icon}</div>
+        <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">${f.title}</div>
+        <div style="font-size:12px; color:var(--emerald); font-family:var(--mono);">⚡ DECRYPTED IN RAM • NO DISK RESIDUE</div>
+      `;
+    }
+    function nextGallery() {
+      const media = files.filter(x => x.cat === 'photos' || x.cat === 'videos');
+      if(activeGalleryIdx < media.length - 1) { activeGalleryIdx++; updateGalleryView(); }
+    }
+    function prevGallery() {
+      if(activeGalleryIdx > 0) { activeGalleryIdx--; updateGalleryView(); }
+    }
     function closeModal() {
-      document.getElementById('modalBody').textContent = "";
       document.getElementById('viewerModal').classList.remove('open');
     }
 
-    function triggerFileAdd() {
-      document.getElementById('filePicker').click();
-    }
-    function handleFile(e) {
-      const file = e.target.files[0];
-      if(!file) return;
-      files.unshift({
-        id: Date.now(),
-        title: file.name.replace(/\.[^/.]+$/, ""),
-        cat: file.type.startsWith('image') ? 'photos' : 'docs',
-        size: (file.size / 1024).toFixed(1) + " KB",
-        icon: file.type.startsWith('image') ? '📷' : '📄',
-        color: 'rgba(0,229,153,0.15)',
-        text: `ENCRYPTED PAYLOAD: ${file.name}\nSize: ${file.size} bytes\nStatus: AES-256-GCM Sealed.`
-      });
-      renderFiles();
+    function openChangePinModal() { document.getElementById('pinModal').classList.add('open'); }
+    function closePinModal() { document.getElementById('pinModal').classList.remove('open'); }
+    function saveNewPin() {
+      const o = document.getElementById('oldPin').value;
+      const n = document.getElementById('newPin').value;
+      const c = document.getElementById('confirmPin').value;
+      if(o !== MASTER_PIN) return alert("Current PIN is incorrect.");
+      if(n.length !== 6 || n !== c) return alert("PINs do not match or are not 6 digits.");
+      MASTER_PIN = n;
+      document.getElementById('hintMasterPin').textContent = n;
+      alert("Master PIN changed successfully!");
+      closePinModal();
     }
 
-    function simulateCamCapture() {
+    function captureSecurePhoto() {
       const ts = Math.floor(Date.now() / 1000);
       files.unshift({
         id: Date.now(),
         title: "Direct Photo " + ts,
         cat: "photos",
-        size: "3.2 MB",
+        group: "Today",
+        size: "3.8 MB",
         icon: "📷",
         color: "rgba(0,229,153,0.15)",
-        text: "RAM CAMERA CAPTURE\n\nWritten zero bytes to iOS Camera Roll."
+        isVideo: false
+      });
+      renderFiles();
+    }
+    function triggerFileAdd() { document.getElementById('filePicker').click(); }
+    function handleFile(e) {
+      const f = e.target.files[0];
+      if(!f) return;
+      files.unshift({
+        id: Date.now(),
+        title: f.name.replace(/\.[^/.]+$/, ""),
+        cat: f.type.startsWith('video') ? 'videos' : 'photos',
+        group: "Today",
+        size: (f.size / (1024*1024)).toFixed(1) + " MB",
+        icon: f.type.startsWith('video') ? '🎬' : '📷',
+        color: f.type.startsWith('video') ? 'rgba(255,59,92,0.15)' : 'rgba(0,229,153,0.15)',
+        isVideo: f.type.startsWith('video')
       });
       renderFiles();
     }
